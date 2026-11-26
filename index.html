@@ -1,0 +1,1683 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Diagnóstico Tecnológico y Operativo Empresarial (Venezuela)</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <!-- jsPDF y jsPDF-AutoTable para Reporte Ejecutivo en PDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            navy: {
+              DEFAULT: '#1B2A4A',
+              light: '#273B66',
+              dark: '#111C33',
+            },
+            tealcorp: {
+              DEFAULT: '#2B5B6C',
+              light: '#3A768B',
+              soft: '#EBF3F5',
+            },
+            slatecorp: {
+              DEFAULT: '#3B4D6B',
+              bg: '#F4F7FA',
+            }
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    body {
+      background-color: #F4F7FA;
+      color: #1E293B;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .progress-bar-fill {
+      transition: width 0.45s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease;
+    }
+
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    @keyframes fadeSlideUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .toast-enter {
+      animation: fadeSlideUp 0.28s ease-out forwards;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans antialiased">
+
+  <!-- =====================================================================
+       CABECERA CORPORATIVA (SLATE NAVY & TEAL)
+  ====================================================================== -->
+  <header class="bg-gradient-to-r from-[#1B2A4A] via-[#22385E] to-[#2B5B6C] text-white shadow-lg sticky top-0 z-30">
+    <div class="max-w-6xl mx-auto px-4 py-3.5 sm:py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+      <div class="flex items-start sm:items-center gap-3">
+        <div class="w-11 h-11 rounded-xl bg-white/15 backdrop-blur-sm border border-white/20 flex items-center justify-center shrink-0 shadow-inner">
+          <svg class="w-6 h-6 text-amber-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+          </svg>
+        </div>
+        <div>
+          <div class="flex items-center gap-2 flex-wrap">
+            <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-amber-400/20 text-amber-200 border border-amber-300/30">
+              Ruta de Digitalización • Venezuela
+            </span>
+            <span class="text-[11px] text-emerald-300 inline-flex items-center gap-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Autoguardado activo
+            </span>
+          </div>
+          <h1 class="text-base sm:text-xl font-extrabold tracking-tight leading-snug mt-1">
+            Diagnóstico Tecnológico y Operativo Empresarial (Venezuela)
+          </h1>
+        </div>
+      </div>
+
+      <!-- Indicador rápido y acceso a GitHub / Resultados -->
+      <div class="flex items-center justify-between sm:justify-end gap-2.5">
+        <div class="flex items-center gap-3 bg-white/10 px-3.5 py-2 rounded-xl border border-white/15">
+          <div class="text-left sm:text-right">
+            <div class="text-[10px] text-slate-200 uppercase font-semibold tracking-wider">Índice Global</div>
+            <div class="flex items-baseline gap-1.5">
+              <span id="headerGlobalScore" class="text-lg sm:text-2xl font-extrabold text-white">0%</span>
+              <span id="headerGlobalBadge" class="text-[10px] sm:text-[11px] font-semibold px-2 py-0.5 rounded-md bg-rose-500/30 text-rose-100">
+                Sin evaluar
+              </span>
+            </div>
+          </div>
+          <button onclick="scrollToResults()" class="px-3 py-2 rounded-lg bg-amber-400 hover:bg-amber-300 text-[#1B2A4A] font-bold text-xs transition shadow-sm shrink-0">
+            Reporte PDF
+          </button>
+        </div>
+
+        <button onclick="toggleGithubModal(true)" class="p-2.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white transition shrink-0" title="Publicar en GitHub Pages">
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- =====================================================================
+       CONTENIDO PRINCIPAL
+  ====================================================================== -->
+  <main class="flex-1 max-w-6xl w-full mx-auto px-3 sm:px-6 py-6 space-y-6">
+
+    <!-- -------------------------------------------------------------------
+         SECCIÓN 1: DATOS GENERALES DE LA EMPRESA EVALUADA (10 CAMPOS)
+    -------------------------------------------------------------------- -->
+    <section class="bg-white rounded-2xl shadow-sm border border-slate-200/90 overflow-hidden">
+      <div class="bg-[#1B2A4A] text-white px-5 py-3.5 flex flex-wrap items-center justify-between gap-2">
+        <div class="flex items-center gap-2.5">
+          <span class="w-7 h-7 rounded-lg bg-[#2B5B6C] text-white font-bold text-xs flex items-center justify-center border border-white/20">1</span>
+          <div>
+            <h2 class="text-sm sm:text-base font-bold">1. Datos Generales de la Empresa Evaluada</h2>
+            <p class="text-xs text-slate-300">Complete la ficha técnica para personalizar su reporte ejecutivo en PDF</p>
+          </div>
+        </div>
+        <button onclick="openResetModal()" class="text-xs bg-white/10 hover:bg-rose-600/80 text-white px-3 py-1.5 rounded-lg border border-white/15 font-semibold transition">
+          Reiniciar / Limpiar Formulario
+        </button>
+      </div>
+
+      <div class="p-4 sm:p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <!-- 1. Empresa / Razón Social -->
+        <div>
+          <label for="companyName" class="block text-xs font-bold text-[#1B2A4A] uppercase tracking-wide mb-1.5">
+            Empresa / Razón Social *
+          </label>
+          <input type="text" id="companyName" placeholder="Ej. Inversiones Guayana C.A."
+            class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-300 focus:border-[#2B5B6C] focus:ring-2 focus:ring-[#2B5B6C]/20 outline-none transition bg-slate-50/50 focus:bg-white" />
+        </div>
+
+        <!-- 2. RIF / Sector Comercial -->
+        <div>
+          <label for="companyRif" class="block text-xs font-bold text-[#1B2A4A] uppercase tracking-wide mb-1.5">
+            RIF / Sector Comercial
+          </label>
+          <input type="text" id="companyRif" placeholder="Ej. J-40123456-7 • Ferretería / Comercio"
+            class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-300 focus:border-[#2B5B6C] focus:ring-2 focus:ring-[#2B5B6C]/20 outline-none transition bg-slate-50/50 focus:bg-white" />
+        </div>
+
+        <!-- 3. Contacto Principal / Cargo -->
+        <div>
+          <label for="contactPerson" class="block text-xs font-bold text-[#1B2A4A] uppercase tracking-wide mb-1.5">
+            Contacto Principal / Cargo *
+          </label>
+          <input type="text" id="contactPerson" placeholder="Ej. Carlos Mendoza — Gerente General"
+            class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-300 focus:border-[#2B5B6C] focus:ring-2 focus:ring-[#2B5B6C]/20 outline-none transition bg-slate-50/50 focus:bg-white" />
+        </div>
+
+        <!-- 4. Teléfono / WhatsApp de la Empresa -->
+        <div>
+          <label for="clientPhone" class="block text-xs font-bold text-[#1B2A4A] uppercase tracking-wide mb-1.5">
+            Teléfono / WhatsApp de la Empresa
+          </label>
+          <input type="tel" id="clientPhone" placeholder="Ej. +58 414-1234567"
+            class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-300 focus:border-[#2B5B6C] focus:ring-2 focus:ring-[#2B5B6C]/20 outline-none transition bg-slate-50/50 focus:bg-white" />
+        </div>
+
+        <!-- 5. Fecha de Diagnóstico -->
+        <div>
+          <label for="evalDate" class="block text-xs font-bold text-[#1B2A4A] uppercase tracking-wide mb-1.5">
+            Fecha de Diagnóstico
+          </label>
+          <input type="date" id="evalDate"
+            class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-300 focus:border-[#2B5B6C] focus:ring-2 focus:ring-[#2B5B6C]/20 outline-none transition bg-slate-50/50 focus:bg-white" />
+        </div>
+
+        <!-- 6. N° de Empleados Evaluados -->
+        <div>
+          <label for="employeesCount" class="block text-xs font-bold text-[#1B2A4A] uppercase tracking-wide mb-1.5">
+            N° de Empleados Evaluados
+          </label>
+          <input type="number" id="employeesCount" min="1" placeholder="Ej. 12"
+            class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-300 focus:border-[#2B5B6C] focus:ring-2 focus:ring-[#2B5B6C]/20 outline-none transition bg-slate-50/50 focus:bg-white" />
+        </div>
+
+        <!-- 7. Modalidad de Evaluación -->
+        <div>
+          <label for="evalModality" class="block text-xs font-bold text-[#1B2A4A] uppercase tracking-wide mb-1.5">
+            Modalidad de Evaluación
+          </label>
+          <select id="evalModality"
+            class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-300 focus:border-[#2B5B6C] focus:ring-2 focus:ring-[#2B5B6C]/20 outline-none transition bg-slate-50/50 focus:bg-white">
+            <option value="Presencial">Presencial</option>
+            <option value="Remota">Remota</option>
+            <option value="Híbrida">Híbrida</option>
+          </select>
+        </div>
+
+        <!-- 8. Consultor Responsable -->
+        <div>
+          <label for="responsibleConsultant" class="block text-xs font-bold text-[#1B2A4A] uppercase tracking-wide mb-1.5">
+            Consultor Responsable
+          </label>
+          <input type="text" id="responsibleConsultant" placeholder="Ej. Lic. Andrés Salazar"
+            class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-300 focus:border-[#2B5B6C] focus:ring-2 focus:ring-[#2B5B6C]/20 outline-none transition bg-slate-50/50 focus:bg-white" />
+        </div>
+
+        <!-- 9. Técnico Implementador -->
+        <div>
+          <label for="techImplementer" class="block text-xs font-bold text-[#1B2A4A] uppercase tracking-wide mb-1.5">
+            Técnico Implementador
+          </label>
+          <input type="text" id="techImplementer" placeholder="Ej. Ing. Luis Gómez"
+            class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-300 focus:border-[#2B5B6C] focus:ring-2 focus:ring-[#2B5B6C]/20 outline-none transition bg-slate-50/50 focus:bg-white" />
+        </div>
+
+        <!-- 10. Analista Contable -->
+        <div class="sm:col-span-2 lg:col-span-3">
+          <label for="accountingAnalyst" class="block text-xs font-bold text-[#1B2A4A] uppercase tracking-wide mb-1.5">
+            Analista Contable
+          </label>
+          <input type="text" id="accountingAnalyst" placeholder="Ej. Lcda. María Rodríguez"
+            class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-300 focus:border-[#2B5B6C] focus:ring-2 focus:ring-[#2B5B6C]/20 outline-none transition bg-slate-50/50 focus:bg-white" />
+        </div>
+      </div>
+    </section>
+
+    <!-- -------------------------------------------------------------------
+         SECCIÓN 2: TABLERO EJECUTIVO EN TIEMPO REAL
+    -------------------------------------------------------------------- -->
+    <section class="bg-white rounded-2xl shadow-sm border border-slate-200/90 overflow-hidden">
+      <div class="bg-[#2B5B6C] text-white px-5 py-3.5 flex flex-wrap items-center justify-between gap-2">
+        <div class="flex items-center gap-2.5">
+          <span class="w-7 h-7 rounded-lg bg-[#1B2A4A] text-white font-bold text-xs flex items-center justify-center border border-white/20">2</span>
+          <div>
+            <h2 class="text-sm sm:text-base font-bold">2. Tablero Ejecutivo de Madurez Empresarial (Tiempo Real)</h2>
+            <p class="text-xs text-slate-200">Cálculo ponderado automático por Etapas Operativas y Pilares de Servicio</p>
+          </div>
+        </div>
+        <span id="evaluatedCounterBadge" class="text-xs font-bold px-3 py-1 rounded-full bg-white/15 text-white border border-white/20">
+          0 / 29 Ítems Evaluados
+        </span>
+      </div>
+
+      <div class="p-4 sm:p-6 space-y-5">
+        <!-- Fila Superior: Índice Global + Clasificación + Prioridad -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <!-- Tarjeta Índice Global -->
+          <div id="globalCardBox" class="rounded-2xl p-4 sm:p-5 bg-gradient-to-br from-[#1B2A4A] to-[#273B66] text-white flex flex-col justify-between shadow-sm">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold uppercase tracking-wider text-slate-300">Índice Global de Madurez</span>
+              <span class="text-xs px-2 py-0.5 rounded bg-white/10 text-amber-300 font-semibold">29 Criterios</span>
+            </div>
+            <div class="my-3 flex items-baseline gap-3">
+              <span id="dashGlobalPct" class="text-4xl sm:text-5xl font-extrabold tracking-tight">0%</span>
+              <span id="dashMaturityLevel" class="text-xs sm:text-sm font-bold px-2.5 py-1 rounded-lg bg-rose-500/30 text-rose-100 border border-rose-400/30">
+                Rezago Operativo
+              </span>
+            </div>
+            <div class="w-full bg-white/15 rounded-full h-2.5 overflow-hidden">
+              <div id="dashGlobalBar" class="progress-bar-fill h-full bg-rose-400 rounded-full" style="width: 0%"></div>
+            </div>
+            <div class="mt-2.5 flex items-center justify-between text-[11px] text-slate-300">
+              <span id="dashPriorityText">Prioridad: Intervención Urgente</span>
+              <span id="dashScoreCounts">C: 0 | P: 0 | NC: 0</span>
+            </div>
+          </div>
+
+          <!-- Desglose por las 3 Etapas -->
+          <div class="rounded-2xl p-4 sm:p-5 bg-slate-50 border border-slate-200/80 flex flex-col justify-between">
+            <h3 class="text-xs font-extrabold uppercase tracking-wider text-[#1B2A4A] mb-3 flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-[#2B5B6C]"></span> Cumplimiento por Etapa
+            </h3>
+            <div class="space-y-3">
+              <div>
+                <div class="flex justify-between text-xs font-semibold mb-1">
+                  <span class="text-slate-700">Etapa 1: Sistemas Op. + IA</span>
+                  <span id="stage1PctText" class="font-bold text-[#1B2A4A]">0%</span>
+                </div>
+                <div class="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
+                  <div id="stage1Bar" class="progress-bar-fill h-full bg-[#2B5B6C] rounded-full" style="width: 0%"></div>
+                </div>
+              </div>
+
+              <div>
+                <div class="flex justify-between text-xs font-semibold mb-1">
+                  <span class="text-slate-700">Etapa 2: Sistemas Web, Adm. y Contables</span>
+                  <span id="stage2PctText" class="font-bold text-[#1B2A4A]">0%</span>
+                </div>
+                <div class="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
+                  <div id="stage2Bar" class="progress-bar-fill h-full bg-[#2B5B6C] rounded-full" style="width: 0%"></div>
+                </div>
+              </div>
+
+              <div>
+                <div class="flex justify-between text-xs font-semibold mb-1">
+                  <span class="text-slate-700">Etapa 3: Pagos Digitales y RRSS</span>
+                  <span id="stage3PctText" class="font-bold text-[#1B2A4A]">0%</span>
+                </div>
+                <div class="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
+                  <div id="stage3Bar" class="progress-bar-fill h-full bg-[#2B5B6C] rounded-full" style="width: 0%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Desglose por los 3 Pilares de Servicio -->
+          <div class="rounded-2xl p-4 sm:p-5 bg-slate-50 border border-slate-200/80 flex flex-col justify-between">
+            <h3 class="text-xs font-extrabold uppercase tracking-wider text-[#1B2A4A] mb-3 flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-amber-500"></span> Cumplimiento por Pilar de Servicio
+            </h3>
+            <div class="space-y-3">
+              <div>
+                <div class="flex justify-between text-xs font-semibold mb-1">
+                  <span class="text-slate-700">1. Configuración e Instalación</span>
+                  <span id="pillar1PctText" class="font-bold text-[#1B2A4A]">0%</span>
+                </div>
+                <div class="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
+                  <div id="pillar1Bar" class="progress-bar-fill h-full bg-[#1B2A4A] rounded-full" style="width: 0%"></div>
+                </div>
+              </div>
+
+              <div>
+                <div class="flex justify-between text-xs font-semibold mb-1">
+                  <span class="text-slate-700">2. Capacitación y Adiestramiento</span>
+                  <span id="pillar2PctText" class="font-bold text-[#1B2A4A]">0%</span>
+                </div>
+                <div class="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
+                  <div id="pillar2Bar" class="progress-bar-fill h-full bg-[#1B2A4A] rounded-full" style="width: 0%"></div>
+                </div>
+              </div>
+
+              <div>
+                <div class="flex justify-between text-xs font-semibold mb-1">
+                  <span class="text-slate-700">3. Mantenimiento Mensual Programado</span>
+                  <span id="pillar3PctText" class="font-bold text-[#1B2A4A]">0%</span>
+                </div>
+                <div class="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
+                  <div id="pillar3Bar" class="progress-bar-fill h-full bg-[#1B2A4A] rounded-full" style="width: 0%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- -------------------------------------------------------------------
+         SECCIÓN 3: LISTA DE CHEQUEO INTERACTIVA (29 ÍTEMS)
+    -------------------------------------------------------------------- -->
+    <section class="bg-white rounded-2xl shadow-sm border border-slate-200/90 overflow-hidden">
+      <div class="bg-[#1B2A4A] text-white px-5 py-3.5 flex flex-wrap items-center justify-between gap-2">
+        <div class="flex items-center gap-2.5">
+          <span class="w-7 h-7 rounded-lg bg-[#2B5B6C] text-white font-bold text-xs flex items-center justify-center border border-white/20">3</span>
+          <div>
+            <h2 class="text-sm sm:text-base font-bold">3. Lista de Chequeo Interactiva (29 Criterios de Auditoría)</h2>
+            <p class="text-xs text-slate-300">Seleccione el estado actual, nivel de dominio del personal y registre hallazgos</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Barra de Navegación por Etapas + Vista Completa -->
+      <div class="bg-slate-100 border-b border-slate-200 px-3 sm:px-5 pt-3 flex items-center gap-2 overflow-x-auto no-scrollbar">
+        <button id="tab-stage1" onclick="switchStageTab('stage1')"
+          class="stage-tab px-4 py-2.5 rounded-t-xl text-xs sm:text-sm font-bold whitespace-nowrap transition border-b-2">
+          Etapa 1: Sistemas Op. + IA (10)
+        </button>
+        <button id="tab-stage2" onclick="switchStageTab('stage2')"
+          class="stage-tab px-4 py-2.5 rounded-t-xl text-xs sm:text-sm font-bold whitespace-nowrap transition border-b-2">
+          Etapa 2: Adm. y Contables (10)
+        </button>
+        <button id="tab-stage3" onclick="switchStageTab('stage3')"
+          class="stage-tab px-4 py-2.5 rounded-t-xl text-xs sm:text-sm font-bold whitespace-nowrap transition border-b-2">
+          Etapa 3: Pagos y RRSS (9)
+        </button>
+        <button id="tab-all" onclick="switchStageTab('all')"
+          class="stage-tab px-4 py-2.5 rounded-t-xl text-xs sm:text-sm font-bold whitespace-nowrap transition border-b-2">
+          Vista Completa (29)
+        </button>
+      </div>
+
+      <!-- Contenedor Dinámico del Checklist -->
+      <div id="checklistContainer" class="p-4 sm:p-6 space-y-6"></div>
+    </section>
+
+    <!-- -------------------------------------------------------------------
+         SECCIÓN 4: EXPORTACIÓN PDF Y ENVÍO A WHATSAPP (+58 424-9408721)
+    -------------------------------------------------------------------- -->
+    <section id="resultsExportSection" class="bg-gradient-to-br from-[#1B2A4A] via-[#20345B] to-[#2B5B6C] text-white rounded-2xl shadow-lg p-5 sm:p-7 border border-slate-700/40">
+      <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
+        <div class="space-y-1.5 max-w-2xl">
+          <span class="inline-block text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-400/20 text-emerald-200 border border-emerald-300/30">
+            Entrega Inmediata de Resultados
+          </span>
+          <h2 class="text-lg sm:text-2xl font-extrabold tracking-tight">
+            Generar Reporte Ejecutivo en PDF y Enviar por WhatsApp
+          </h2>
+          <p class="text-xs sm:text-sm text-slate-200 leading-relaxed">
+            Al pulsar el botón principal se descargará automáticamente el <strong>Reporte PDF completo</strong> con los 10 datos de la empresa, métricas por etapa/pilar y los 29 criterios auditados, abriendo WhatsApp directo al <strong>+58 424-9408721</strong> con el resumen ejecutivo listo para adjuntar el PDF.
+          </p>
+        </div>
+
+        <div class="flex flex-col sm:flex-row lg:flex-col gap-2.5 shrink-0">
+          <!-- Botón Principal -->
+          <button onclick="downloadPdfAndSendWhatsApp()"
+            class="px-5 py-3.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 active:scale-[0.99] text-slate-950 font-extrabold text-sm shadow-lg shadow-emerald-950/30 flex items-center justify-center gap-2.5 transition">
+            <svg class="w-5 h-5 shrink-0" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824z"/>
+            </svg>
+            <span>Descargar PDF y Enviar a WhatsApp (+58 424-9408721)</span>
+          </button>
+
+          <!-- Botones Secundarios -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <button onclick="generatePDFReport(true)"
+              class="px-4 py-2.5 rounded-xl bg-white/15 hover:bg-white/25 text-white font-bold text-xs border border-white/20 flex items-center justify-center gap-1.5 transition">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              <span>Solo Descargar PDF</span>
+            </button>
+
+            <button onclick="sendWhatsAppSummaryOnly()"
+              class="px-4 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-[#1B2A4A] font-bold text-xs flex items-center justify-center gap-1.5 transition">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+              </svg>
+              <span>Solo Enviar Resumen WhatsApp</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- =====================================================================
+       FOOTER CORPORATIVO
+  ====================================================================== -->
+  <footer class="bg-[#1B2A4A] text-slate-300 py-5 px-4 mt-8 border-t border-slate-800">
+    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-xs">
+      <p class="font-medium text-center sm:text-left">
+        Diagnóstico Tecnológico y Operativo Empresarial • Ruta de Digitalización (Venezuela)
+      </p>
+      <div class="flex items-center gap-4">
+        <button onclick="toggleGithubModal(true)" class="text-amber-300 hover:underline font-semibold">
+          Guía GitHub Pages
+        </button>
+        <a href="https://wa.me/584249408721" target="_blank" rel="noopener" class="text-emerald-300 font-bold hover:underline">
+          WhatsApp: +58 424-9408721
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- =====================================================================
+       MODAL DE CONFIRMACIÓN PARA REINICIAR FORMULARIO (SIN confirm())
+  ====================================================================== -->
+  <div id="resetModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full shadow-2xl border border-slate-200 overflow-hidden">
+      <div class="bg-[#1B2A4A] text-white px-5 py-3.5 flex items-center justify-between">
+        <h3 class="font-bold text-sm sm:text-base">Confirmar Reinicio de Diagnóstico</h3>
+        <button onclick="closeResetModal()" class="text-slate-300 hover:text-white text-xl leading-none px-2">&times;</button>
+      </div>
+      <div class="p-5 space-y-4 text-sm text-slate-700">
+        <p>¿Está seguro de que desea limpiar todos los datos de la empresa y borrar las respuestas de los 29 criterios evaluados?</p>
+        <div class="flex justify-end gap-2">
+          <button onclick="closeResetModal()" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs transition">
+            Cancelar
+          </button>
+          <button onclick="confirmResetAllData()" class="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs transition">
+            Sí, Limpiar Todo
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       MODAL DE INSTRUCCIONES GITHUB PAGES & DESCARGA DE CÓDIGO FUENTE
+  ====================================================================== -->
+  <div id="githubModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-lg w-full shadow-2xl border border-slate-200 overflow-hidden">
+      <div class="bg-[#1B2A4A] text-white px-5 py-4 flex items-center justify-between">
+        <h3 class="font-bold text-sm sm:text-base">Publicar Sitio Web en GitHub Pages</h3>
+        <button onclick="toggleGithubModal(false)" class="text-slate-300 hover:text-white text-xl leading-none px-2">&times;</button>
+      </div>
+      <div class="p-5 space-y-3 text-xs sm:text-sm text-slate-700">
+        <p>Esta aplicación está diseñada en <strong>un único archivo autónomo (<code class="bg-slate-100 px-1.5 py-0.5 rounded font-mono text-[#1B2A4A]">index.html</code>)</strong> listo para alojarse gratis en GitHub Pages:</p>
+        <ol class="list-decimal list-inside space-y-1.5 bg-slate-50 p-3.5 rounded-xl border border-slate-200 text-xs">
+          <li>Cree un repositorio público en <strong>GitHub</strong> (ejemplo: <code class="font-mono">diagnostico-empresarial</code>).</li>
+          <li>Suba este archivo con el nombre exacto <strong><code class="font-mono">index.html</code></strong> en la raíz del repositorio.</li>
+          <li>Vaya a <strong>Settings &rarr; Pages &rarr; Source</strong>, elija la rama <code class="font-mono">main</code> y carpeta <code class="font-mono">/ (root)</code>, y haga clic en <strong>Save</strong>.</li>
+          <li>En menos de 1 minuto obtendrá su URL pública para compartir en estados y chats de WhatsApp.</li>
+        </ol>
+        <div class="flex flex-col sm:flex-row gap-2 pt-2">
+          <button onclick="downloadHtmlFile()" class="flex-1 px-4 py-2.5 rounded-xl bg-[#1B2A4A] hover:bg-[#2B5B6C] text-white font-bold text-xs transition">
+            Descargar Archivo index.html
+          </button>
+          <button onclick="copyFullHtmlSource()" class="flex-1 px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-[#1B2A4A] font-bold text-xs transition">
+            Copiar Código HTML
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contenedor de Notificaciones Toast -->
+  <div id="toastContainer" class="fixed bottom-4 right-4 left-4 sm:left-auto sm:w-96 z-50 space-y-2 pointer-events-none"></div>
+
+  <!-- =====================================================================
+       LÓGICA COMPLETA: DATOS (29 ÍTEMS), CÁLCULOS, PDF Y WHATSAPP
+  ====================================================================== -->
+  <script>
+    const WHATSAPP_TARGET = '584249408721';
+    const STORAGE_KEY = 'diagnostico_empresarial_vzla_v2';
+
+    // Estructura completa de las 3 Etapas, 3 Pilares y 29 Ítems
+    const DIAGNOSTIC_DATA = [
+      {
+        id: 'stage1',
+        shortTitle: 'Etapa 1',
+        title: 'Etapa 1: Sistemas Operativos e Infraestructura + IA',
+        subtitle: 'Base tecnológica, estabilidad operativa, seguridad informática y productividad con IA.',
+        pillars: [
+          {
+            id: 'pillar1',
+            name: '1. Configuración e Instalación (Servicio)',
+            items: [
+              {
+                code: 'E1-01',
+                title: 'Estandarización de SO (Win / Mac / Linux)',
+                desc: 'Equipos con sistemas operativos estables, genuinos y adecuados al puesto de trabajo.',
+                rec: 'Estandarizar y licenciar sistemas operativos en estaciones críticas para evitar fallos de compatibilidad.'
+              },
+              {
+                code: 'E1-02',
+                title: 'Drivers, Periféricos e Impresoras en Red',
+                desc: 'Controladores, escáneres, lectores de código de barras e impresoras compartidas operativos.',
+                rec: 'Configurar servidores de impresión local/red y actualizar controladores de periféricos de punto de venta y oficina.'
+              },
+              {
+                code: 'E1-03',
+                title: 'Seguridad Perimetral y Antivirus Corporativo',
+                desc: 'Protección antimalware activa, firewall configurado y cuentas sin privilegios de administrador.',
+                rec: 'Implementar solución antivirus corporativa centralizada y segmentar permisos de usuarios estándar.'
+              },
+              {
+                code: 'E1-04',
+                title: 'Conectividad, Red Local y Respaldo Eléctrico (UPS)',
+                desc: 'Cableado/Wi-Fi estable y protección eléctrica (UPS/reguladores) ante fluctuaciones.',
+                rec: 'Instalar UPS en servidores/cajas y optimizar cableado estructurado o cobertura Wi-Fi empresarial.'
+              },
+              {
+                code: 'E1-05',
+                title: 'Configuración de Herramientas de IA en Escritorio',
+                desc: 'Accesos y asistentes de IA (Gemini, ChatGPT, modelos locales) listos para uso diario.',
+                rec: 'Desplegar accesos directos y cuentas corporativas de asistentes IA configurados para tareas administrativas.'
+              }
+            ]
+          },
+          {
+            id: 'pillar2',
+            name: '2. Capacitación y Adiestramiento',
+            items: [
+              {
+                code: 'E1-06',
+                title: 'Manejo Básico y Eficiencia en el Sistema Operativo',
+                desc: 'Gestión ordenada de archivos, carpetas compartidas, atajos y herramientas de ofimática.',
+                rec: 'Dictar taller práctico de organización digital, nube compartida y productividad de escritorio.'
+              },
+              {
+                code: 'E1-07',
+                title: 'Ciberseguridad e Higiene Digital del Personal',
+                desc: 'Identificación de phishing, gestión segura de contraseñas y control de dispositivos USB.',
+                rec: 'Realizar jornada de concientización contra fraudes electrónicos, correos maliciosos y robo de credenciales.'
+              },
+              {
+                code: 'E1-08',
+                title: 'Adiestramiento en Uso de IA para Productividad',
+                desc: 'Redacción de prompts efectivos para resumir documentos, redactar correos y agilizar tareas.',
+                rec: 'Capacitar al equipo administrativo y gerencial en ingeniería de prompts aplicada a operaciones diarias.'
+              }
+            ]
+          },
+          {
+            id: 'pillar3',
+            name: '3. Mantenimiento Mensual Programado',
+            items: [
+              {
+                code: 'E1-09',
+                title: 'Mantenimiento Preventivo de Hardware y Limpieza',
+                desc: 'Cronograma de limpieza física interna, revisión térmica y diagnóstico de salud de discos.',
+                rec: 'Contratar póliza mensual de mantenimiento preventivo físico y monitoreo S.M.A.R.T. de discos.'
+              },
+              {
+                code: 'E1-10',
+                title: 'Actualizaciones de SO y Respaldos (Backups) Nube/Local',
+                desc: 'Parches de seguridad periódicos y copias de seguridad automatizadas y verificadas.',
+                rec: 'Automatizar rutina de respaldos híbridos (local + nube) con pruebas mensuales de restauración.'
+              }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'stage2',
+        shortTitle: 'Etapa 2',
+        title: 'Etapa 2: Sistemas Web, Administrativos y Contables + IA',
+        subtitle: 'Control financiero, inventario, cumplimiento fiscal SENIAT y análisis gerencial.',
+        pillars: [
+          {
+            id: 'pillar1',
+            name: '1. Configuración e Instalación (Servicio)',
+            items: [
+              {
+                code: 'E2-01',
+                title: 'Instalación de Sistema Administrativo y Contable',
+                desc: 'ERP/sistema parametrizado (plan de cuentas, almacenes, listas de precios, centros de costo).',
+                rec: 'Parametrizar integralmente el sistema administrativo/contable y depurar maestros de inventario y clientes.'
+              },
+              {
+                code: 'E2-02',
+                title: 'Cumplimiento Fiscal Venezuela (SENIAT / IGTF / IVA)',
+                desc: 'Alícuotas vigentes, retenciones IVA/ISLR, libros legales, máquina fiscal o facturación digital.',
+                rec: 'Auditar y configurar reglas tributarias SENIAT (IVA, IGTF, retenciones e impresora/imprenta digital).'
+              },
+              {
+                code: 'E2-03',
+                title: 'Gestión Multimoneda y Tasas de Cambio (BCV)',
+                desc: 'Facturación y cobranza en Bs. y divisas con actualización fluida y exacta de tasa BCV.',
+                rec: 'Activar módulo multimoneda con sincronización automática de tasa oficial BCV y diferencial cambiario.'
+              },
+              {
+                code: 'E2-04',
+                title: 'Acceso Web / Nube y Roles de Usuario',
+                desc: 'Acceso remoto seguro para gerencia/contabilidad y permisos segregados por cargo.',
+                rec: 'Habilitar acceso web seguro (VPN/Cloud) y matriz estricta de roles para evitar manipulaciones indebidas.'
+              },
+              {
+                code: 'E2-05',
+                title: 'Integración de IA para Análisis Administrativo',
+                desc: 'Conexión de reportes con herramientas de IA o tableros para analizar ventas, rotación y márgenes.',
+                rec: 'Implementar flujo de exportación de reportes hacia tableros BI / asistentes IA para análisis de rentabilidad.'
+              }
+            ]
+          },
+          {
+            id: 'pillar2',
+            name: '2. Capacitación y Adiestramiento',
+            items: [
+              {
+                code: 'E2-06',
+                title: 'Dominio de Facturación, Compras e Inventario',
+                desc: 'Registro ágil de facturas, notas de entrega, ajustes de inventario y cierres diarios sin errores.',
+                rec: 'Entrenar al personal de caja, compras y almacén en flujos operativos sin desviaciones de stock.'
+              },
+              {
+                code: 'E2-07',
+                title: 'Lectura de Reportes Gerenciales y Contables',
+                desc: 'Extracción e interpretación de estados de resultados, cuentas por cobrar y flujo de caja.',
+                rec: 'Capacitar a gerentes y administradores en lectura de KPIs financieros, antigüedad de saldos y márgenes.'
+              },
+              {
+                code: 'E2-08',
+                title: 'Manuales de Procedimientos y Flujos Internos (SOPs)',
+                desc: 'Guías paso a paso (SOPs) documentadas para continuidad operativa ante rotación de personal.',
+                rec: 'Elaborar manuales operativos internos (SOPs) adaptados a los procesos reales de la empresa.'
+              }
+            ]
+          },
+          {
+            id: 'pillar3',
+            name: '3. Mantenimiento Mensual Programado',
+            items: [
+              {
+                code: 'E2-09',
+                title: 'Respaldo de Base de Datos y Cierre Mensual',
+                desc: 'Backups encriptados de BD contable/adm. y validación preventiva antes del cierre fiscal.',
+                rec: 'Establecer protocolo mensual de respaldo externo de base de datos y auditoría previa a declaración fiscal.'
+              },
+              {
+                code: 'E2-10',
+                title: 'Actualización Fiscal, Soporte Técnico y Auditoría',
+                desc: 'Soporte mensual programado para ajustes de ley, mantenimiento de impresora fiscal y depuración.',
+                rec: 'Suscribir plan de soporte técnico y actualización fiscal continua para garantizar operatividad ininterrumpida.'
+              }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'stage3',
+        shortTitle: 'Etapa 3',
+        title: 'Etapa 3: Pagos Digitales y Redes Sociales',
+        subtitle: 'Captación de clientes, automatización comercial, cobro rápido y conciliación.',
+        pillars: [
+          {
+            id: 'pillar1',
+            name: '1. Configuración e Instalación (Servicio)',
+            items: [
+              {
+                code: 'E3-01',
+                title: 'Canales Digitales y WhatsApp Business Profesional',
+                desc: 'WhatsApp Business (catálogo, respuestas rápidas, etiquetas), Instagram, Facebook/TikTok en Meta Business.',
+                rec: 'Estructurar ecosistema Meta Business y WhatsApp Business con catálogo de productos y embudo por etiquetas.'
+              },
+              {
+                code: 'E3-02',
+                title: 'Pasarelas y Métodos de Pago Digital (Pago Móvil / Zelle / POS)',
+                desc: 'Canales de cobro digital habilitados y visibles (Pago Móvil C2P/P2P, biopago, divisas, enlaces).',
+                rec: 'Habilitar y unificar métodos de cobro digital (Pago Móvil C2P, botones de pago y divisas) en caja y web.'
+              },
+              {
+                code: 'E3-03',
+                title: 'Integración API / Webhooks y Conciliación Automática',
+                desc: 'Conexión de pagos digitales o formularios web vía API/Webhooks con el sistema adm./CRM.',
+                rec: 'Desarrollar integración vía API/Webhooks para validar pagos móviles/transferencias y conciliar automáticamente.'
+              },
+              {
+                code: 'E3-04',
+                title: 'Automatización de Atención (Chatbots / Flujos IA)',
+                desc: 'Respuestas automatizadas o agentes IA para calificar prospectos y atender 24/7.',
+                rec: 'Implementar asistente virtual / chatbot con IA conectado a WhatsApp para atención inmediata y toma de pedidos.'
+              }
+            ]
+          },
+          {
+            id: 'pillar2',
+            name: '2. Capacitación y Adiestramiento',
+            items: [
+              {
+                code: 'E3-05',
+                title: 'Atención al Cliente y Cierre de Ventas por WhatsApp/RRSS',
+                desc: 'Guiones de venta persuasivos, seguimiento de prospectos y tiempos óptimos de respuesta.',
+                rec: 'Entrenar al equipo comercial en ventas conversacionales, seguimiento de cotizaciones y cierre por WhatsApp.'
+              },
+              {
+                code: 'E3-06',
+                title: 'Protocolo de Verificación de Pagos y Prevención de Fraude',
+                desc: 'Validación estricta de referencias bancarias reales antes de despachar mercancía o liberar pedidos.',
+                rec: 'Implantar protocolo obligatorio de verificación bancaria en tiempo real para eliminar fraudes con comprobantes falsos.'
+              },
+              {
+                code: 'E3-07',
+                title: 'Gestión de Contenido y Pauta Digital Básica',
+                desc: 'Planificación de publicaciones, lectura de métricas y ejecución de campañas locales efectivas.',
+                rec: 'Capacitar al encargado de mercadeo en calendario de contenidos y pauta segmentada en Meta Ads.'
+              }
+            ]
+          },
+          {
+            id: 'pillar3',
+            name: '3. Mantenimiento Mensual Programado',
+            items: [
+              {
+                code: 'E3-08',
+                title: 'Monitoreo de APIs, Webhooks y Pasarelas de Pago',
+                desc: 'Supervisión mensual de enlaces de pago, webhooks bancarios, tokens de Meta y certificados SSL.',
+                rec: 'Incluir monitoreo técnico mensual de integraciones API, webhooks de pago y vigencia de tokens/certificados.'
+              },
+              {
+                code: 'E3-09',
+                title: 'Auditoría Mensual de Métricas Digitales y Optimización',
+                desc: 'Revisión mensual de tasas de conversión, tiempos de respuesta y rendimiento del embudo comercial.',
+                rec: 'Realizar comité mensual de métricas digitales para optimizar conversión de leads y retorno de inversión.'
+              }
+            ]
+          }
+        ]
+      }
+    ];
+
+    // Estado global reactivo
+    let appState = {
+      company: {
+        name: '',
+        rif: '',
+        contact: '',
+        phone: '',
+        date: new Date().toISOString().split('T')[0],
+        employees: '',
+        modality: 'Presencial',
+        consultant: '',
+        techImplementer: '',
+        accountingAnalyst: ''
+      },
+      responses: {},
+      activeTab: 'stage1'
+    };
+
+    // Inicializar respuestas vacías
+    function initDefaultResponses() {
+      DIAGNOSTIC_DATA.forEach(stage => {
+        stage.pillars.forEach(pillar => {
+          pillar.items.forEach(item => {
+            if (!appState.responses[item.code]) {
+              appState.responses[item.code] = {
+                status: null,
+                usage: '',
+                note: ''
+              };
+            }
+          });
+        });
+      });
+    }
+
+    // Cargar desde localStorage
+    function loadSavedState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (parsed.company) {
+            appState.company = { ...appState.company, ...parsed.company };
+          }
+          if (parsed.responses) {
+            appState.responses = { ...parsed.responses };
+          }
+          if (parsed.activeTab) {
+            appState.activeTab = parsed.activeTab;
+          }
+        }
+      } catch (e) {
+        console.warn('No se pudo cargar localStorage:', e);
+      }
+      initDefaultResponses();
+    }
+
+    // Guardar en localStorage
+    function persistState() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+      } catch (e) {
+        console.warn('No se pudo guardar en localStorage:', e);
+      }
+    }
+
+    // Enlazar los 10 inputs de Datos Generales
+    function bindCompanyInputs() {
+      const fields = [
+        { id: 'companyName', key: 'name' },
+        { id: 'companyRif', key: 'rif' },
+        { id: 'contactPerson', key: 'contact' },
+        { id: 'clientPhone', key: 'phone' },
+        { id: 'evalDate', key: 'date' },
+        { id: 'employeesCount', key: 'employees' },
+        { id: 'evalModality', key: 'modality' },
+        { id: 'responsibleConsultant', key: 'consultant' },
+        { id: 'techImplementer', key: 'techImplementer' },
+        { id: 'accountingAnalyst', key: 'accountingAnalyst' }
+      ];
+
+      fields.forEach(({ id, key }) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.value = appState.company[key] || '';
+        const handler = (e) => {
+          appState.company[key] = e.target.value;
+          persistState();
+        };
+        el.oninput = handler;
+        el.onchange = handler;
+      });
+    }
+
+    // Cambiar pestaña de etapa
+    function switchStageTab(tabId) {
+      appState.activeTab = tabId;
+      persistState();
+
+      document.querySelectorAll('.stage-tab').forEach(btn => {
+        btn.classList.remove('bg-white', 'text-[#1B2A4A]', 'border-[#2B5B6C]', 'shadow-sm');
+        btn.classList.add('bg-transparent', 'text-slate-600', 'border-transparent', 'hover:text-[#1B2A4A]');
+      });
+
+      const activeBtn = document.getElementById(`tab-${tabId}`);
+      if (activeBtn) {
+        activeBtn.classList.remove('bg-transparent', 'text-slate-600', 'border-transparent', 'hover:text-[#1B2A4A]');
+        activeBtn.classList.add('bg-white', 'text-[#1B2A4A]', 'border-[#2B5B6C]', 'shadow-sm');
+      }
+
+      renderChecklist();
+    }
+
+    // Renderizar Lista de Chequeo
+    function renderChecklist() {
+      const container = document.getElementById('checklistContainer');
+      if (!container) return;
+
+      const stagesToRender = appState.activeTab === 'all'
+        ? DIAGNOSTIC_DATA
+        : DIAGNOSTIC_DATA.filter(s => s.id === appState.activeTab);
+
+      let html = '';
+
+      stagesToRender.forEach(stage => {
+        html += `
+          <div class="space-y-5">
+            <div class="border-l-4 border-[#2B5B6C] pl-3.5 py-1 bg-[#EBF3F5]/60 rounded-r-xl">
+              <h3 class="text-sm sm:text-base font-extrabold text-[#1B2A4A]">${stage.title}</h3>
+              <p class="text-xs text-slate-600">${stage.subtitle}</p>
+            </div>
+        `;
+
+        stage.pillars.forEach(pillar => {
+          html += `
+            <div class="space-y-3">
+              <div class="flex items-center justify-between bg-slate-100 px-3.5 py-2 rounded-xl border border-slate-200">
+                <span class="text-xs sm:text-sm font-bold text-[#2B5B6C]">${pillar.name}</span>
+                <span class="text-[11px] font-semibold text-slate-500">${pillar.items.length} criterios</span>
+              </div>
+
+              <div class="space-y-3">
+          `;
+
+          pillar.items.forEach(item => {
+            const resp = appState.responses[item.code] || { status: null, usage: '', note: '' };
+            const st = resp.status;
+
+            const btnBase = 'px-2.5 py-2 rounded-lg text-xs font-bold border transition flex items-center justify-center gap-1 select-none';
+            const cumpleCls = st === 'Cumple'
+              ? 'bg-emerald-600 text-white border-emerald-700 shadow-sm'
+              : 'bg-white text-emerald-700 border-emerald-200 hover:bg-emerald-50';
+            const parcialCls = st === 'Parcial'
+              ? 'bg-amber-500 text-white border-amber-600 shadow-sm'
+              : 'bg-white text-amber-700 border-amber-200 hover:bg-amber-50';
+            const noCumpleCls = st === 'No Cumple'
+              ? 'bg-rose-600 text-white border-rose-700 shadow-sm'
+              : 'bg-white text-rose-700 border-rose-200 hover:bg-rose-50';
+            const naCls = st === 'N/A'
+              ? 'bg-slate-600 text-white border-slate-700 shadow-sm'
+              : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-100';
+
+            const cardBorder = st === 'Cumple' ? 'border-emerald-300 bg-emerald-50/20'
+              : st === 'Parcial' ? 'border-amber-300 bg-amber-50/20'
+              : st === 'No Cumple' ? 'border-rose-300 bg-rose-50/20'
+              : 'border-slate-200 bg-white';
+
+            html += `
+              <div id="card-${item.code}" class="rounded-xl border ${cardBorder} p-3.5 sm:p-4 transition shadow-2xs">
+                <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-3">
+                  <!-- Descripción del criterio -->
+                  <div class="space-y-1 flex-1">
+                    <div class="flex items-center gap-2 flex-wrap">
+                      <span class="text-[11px] font-extrabold px-2 py-0.5 rounded bg-[#1B2A4A] text-white font-mono">
+                        ${item.code}
+                      </span>
+                      <h4 class="text-sm font-bold text-[#1B2A4A]">${item.title}</h4>
+                    </div>
+                    <p class="text-xs text-slate-600 leading-relaxed">${item.desc}</p>
+                  </div>
+
+                  <!-- Botones de Estado Actual -->
+                  <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5 shrink-0">
+                    <button type="button" onclick="setItemStatus('${item.code}', 'Cumple')" class="${btnBase} ${cumpleCls}">
+                      <span>✓</span> Cumple
+                    </button>
+                    <button type="button" onclick="setItemStatus('${item.code}', 'Parcial')" class="${btnBase} ${parcialCls}">
+                      <span>◐</span> Parcial
+                    </button>
+                    <button type="button" onclick="setItemStatus('${item.code}', 'No Cumple')" class="${btnBase} ${noCumpleCls}">
+                      <span>✕</span> No Cumple
+                    </button>
+                    <button type="button" onclick="setItemStatus('${item.code}', 'N/A')" class="${btnBase} ${naCls}">
+                      <span>—</span> N/A
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Fila inferior: Nivel de Uso Empleado + Hallazgos/Observaciones -->
+                <div class="mt-3 pt-3 border-t border-slate-200/70 grid grid-cols-1 sm:grid-cols-12 gap-2.5">
+                  <div class="sm:col-span-4">
+                    <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-1">
+                      Nivel de Uso del Empleado
+                    </label>
+                    <select onchange="setItemUsage('${item.code}', this.value)"
+                      class="w-full px-2.5 py-2 text-xs rounded-lg border border-slate-300 bg-white focus:border-[#2B5B6C] outline-none">
+                      <option value="" ${resp.usage === '' ? 'selected' : ''}>Seleccionar nivel...</option>
+                      <option value="Alto (Autónomo)" ${resp.usage === 'Alto (Autónomo)' ? 'selected' : ''}>Alto (Autónomo)</option>
+                      <option value="Medio (Con apoyo)" ${resp.usage === 'Medio (Con apoyo)' ? 'selected' : ''}>Medio (Con apoyo)</option>
+                      <option value="Bajo (Dependiente)" ${resp.usage === 'Bajo (Dependiente)' ? 'selected' : ''}>Bajo (Dependiente)</option>
+                      <option value="Nulo / No usa" ${resp.usage === 'Nulo / No usa' ? 'selected' : ''}>Nulo / No usa</option>
+                    </select>
+                  </div>
+
+                  <div class="sm:col-span-8">
+                    <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-1">
+                      Hallazgos / Brechas Detectadas y Acción Recomendada
+                    </label>
+                    <input type="text" value="${escapeHtml(resp.note || '')}"
+                      oninput="setItemNote('${item.code}', this.value)"
+                      placeholder="Sugerencia: ${escapeHtml(item.rec)}"
+                      class="w-full px-3 py-2 text-xs rounded-lg border border-slate-300 bg-white focus:border-[#2B5B6C] outline-none" />
+                  </div>
+                </div>
+              </div>
+            `;
+          });
+
+          html += `</div></div>`;
+        });
+
+        html += `</div>`;
+      });
+
+      container.innerHTML = html;
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+    }
+
+    // Actualizar Estado Actual de un ítem
+    function setItemStatus(code, status) {
+      if (!appState.responses[code]) {
+        appState.responses[code] = { status: null, usage: '', note: '' };
+      }
+      // Permitir desmarcar si vuelve a pulsar el mismo estado
+      appState.responses[code].status = appState.responses[code].status === status ? null : status;
+      persistState();
+      renderChecklist();
+      recalculateAll();
+    }
+
+    // Actualizar Nivel de Uso del Empleado
+    function setItemUsage(code, usage) {
+      if (!appState.responses[code]) {
+        appState.responses[code] = { status: null, usage: '', note: '' };
+      }
+      appState.responses[code].usage = usage;
+      persistState();
+    }
+
+    // Actualizar Hallazgo / Nota
+    function setItemNote(code, note) {
+      if (!appState.responses[code]) {
+        appState.responses[code] = { status: null, usage: '', note: '' };
+      }
+      appState.responses[code].note = note;
+      persistState();
+    }
+
+    // Cálculo Ponderado Global, por Etapas y por Pilares
+    function computeMetrics() {
+      let totalPoints = 0;
+      let totalValidItems = 0;
+      let totalEvaluated = 0;
+
+      const counts = { Cumple: 0, Parcial: 0, 'No Cumple': 0, 'N/A': 0 };
+      const stageStats = {
+        stage1: { points: 0, valid: 0, pct: 0 },
+        stage2: { points: 0, valid: 0, pct: 0 },
+        stage3: { points: 0, valid: 0, pct: 0 }
+      };
+      const pillarStats = {
+        pillar1: { points: 0, valid: 0, pct: 0 },
+        pillar2: { points: 0, valid: 0, pct: 0 },
+        pillar3: { points: 0, valid: 0, pct: 0 }
+      };
+      const gaps = [];
+
+      DIAGNOSTIC_DATA.forEach(stage => {
+        stage.pillars.forEach(pillar => {
+          pillar.items.forEach(item => {
+            const resp = appState.responses[item.code] || {};
+            const st = resp.status;
+
+            if (st) {
+              totalEvaluated++;
+              if (counts[st] !== undefined) counts[st]++;
+            }
+
+            if (st === 'Cumple' || st === 'Parcial' || st === 'No Cumple') {
+              const pts = st === 'Cumple' ? 1.0 : st === 'Parcial' ? 0.5 : 0.0;
+              totalPoints += pts;
+              totalValidItems += 1;
+
+              stageStats[stage.id].points += pts;
+              stageStats[stage.id].valid += 1;
+
+              pillarStats[pillar.id].points += pts;
+              pillarStats[pillar.id].valid += 1;
+
+              if (st === 'No Cumple' || st === 'Parcial') {
+                gaps.push({
+                  code: item.code,
+                  title: item.title,
+                  status: st,
+                  stage: stage.shortTitle,
+                  pillar: pillar.name,
+                  note: resp.note || item.rec
+                });
+              }
+            }
+          });
+        });
+      });
+
+      const globalPct = totalValidItems > 0 ? Math.round((totalPoints / totalValidItems) * 100) : 0;
+
+      Object.keys(stageStats).forEach(k => {
+        stageStats[k].pct = stageStats[k].valid > 0
+          ? Math.round((stageStats[k].points / stageStats[k].valid) * 100)
+          : 0;
+      });
+
+      Object.keys(pillarStats).forEach(k => {
+        pillarStats[k].pct = pillarStats[k].valid > 0
+          ? Math.round((pillarStats[k].points / pillarStats[k].valid) * 100)
+          : 0;
+      });
+
+      let classification = {
+        label: 'Rezago Operativo',
+        priority: 'Intervención Urgente',
+        badgeClass: 'bg-rose-500/30 text-rose-100 border-rose-400/30',
+        barClass: 'bg-rose-400'
+      };
+
+      if (totalEvaluated === 0) {
+        classification = {
+          label: 'Sin evaluar',
+          priority: 'Pendiente de auditoría',
+          badgeClass: 'bg-slate-500/30 text-slate-200 border-slate-400/30',
+          barClass: 'bg-slate-400'
+        };
+      } else if (globalPct >= 80) {
+        classification = {
+          label: 'Empresa Digitalizada',
+          priority: 'Optimización y Mantenimiento',
+          badgeClass: 'bg-emerald-500/30 text-emerald-100 border-emerald-400/30',
+          barClass: 'bg-emerald-400'
+        };
+      } else if (globalPct >= 50) {
+        classification = {
+          label: 'Transición Digital',
+          priority: 'Estandarización Prioritaria',
+          badgeClass: 'bg-amber-500/30 text-amber-100 border-amber-400/30',
+          barClass: 'bg-amber-400'
+        };
+      }
+
+      return {
+        globalPct,
+        totalEvaluated,
+        totalValidItems,
+        counts,
+        stageStats,
+        pillarStats,
+        classification,
+        gaps
+      };
+    }
+
+    // Actualizar interfaz del Tablero Ejecutivo y Cabecera
+    function recalculateAll() {
+      const m = computeMetrics();
+
+      // Cabecera
+      const hScore = document.getElementById('headerGlobalScore');
+      const hBadge = document.getElementById('headerGlobalBadge');
+      if (hScore) hScore.textContent = `${m.globalPct}%`;
+      if (hBadge) {
+        hBadge.textContent = m.classification.label;
+        hBadge.className = `text-[10px] sm:text-[11px] font-semibold px-2 py-0.5 rounded-md border ${m.classification.badgeClass}`;
+      }
+
+      // Contador ítems evaluados
+      const evalBadge = document.getElementById('evaluatedCounterBadge');
+      if (evalBadge) evalBadge.textContent = `${m.totalEvaluated} / 29 Ítems Evaluados`;
+
+      // Tarjeta Global
+      const dPct = document.getElementById('dashGlobalPct');
+      const dLevel = document.getElementById('dashMaturityLevel');
+      const dBar = document.getElementById('dashGlobalBar');
+      const dPrio = document.getElementById('dashPriorityText');
+      const dCounts = document.getElementById('dashScoreCounts');
+
+      if (dPct) dPct.textContent = `${m.globalPct}%`;
+      if (dLevel) {
+        dLevel.textContent = m.classification.label;
+        dLevel.className = `text-xs sm:text-sm font-bold px-2.5 py-1 rounded-lg border ${m.classification.badgeClass}`;
+      }
+      if (dBar) {
+        dBar.style.width = `${m.globalPct}%`;
+        dBar.className = `progress-bar-fill h-full rounded-full ${m.classification.barClass}`;
+      }
+      if (dPrio) dPrio.textContent = `Prioridad: ${m.classification.priority}`;
+      if (dCounts) dCounts.textContent = `C: ${m.counts.Cumple} | P: ${m.counts.Parcial} | NC: ${m.counts['No Cumple']}`;
+
+      // Barras por Etapa
+      ['stage1', 'stage2', 'stage3'].forEach(stKey => {
+        const pct = m.stageStats[stKey].pct;
+        const txtEl = document.getElementById(`${stKey}PctText`);
+        const barEl = document.getElementById(`${stKey}Bar`);
+        if (txtEl) txtEl.textContent = `${pct}%`;
+        if (barEl) barEl.style.width = `${pct}%`;
+      });
+
+      // Barras por Pilar
+      ['pillar1', 'pillar2', 'pillar3'].forEach(pKey => {
+        const pct = m.pillarStats[pKey].pct;
+        const txtEl = document.getElementById(`${pKey}PctText`);
+        const barEl = document.getElementById(`${pKey}Bar`);
+        if (txtEl) txtEl.textContent = `${pct}%`;
+        if (barEl) barEl.style.width = `${pct}%`;
+      });
+    }
+
+    // Construcción del Documento PDF con jsPDF + AutoTable
+    function buildPdfDocument() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+      const m = computeMetrics();
+
+      const companyName = (appState.company.name || 'Empresa No Especificada').trim();
+      const companyRif = (appState.company.rif || 'N/A').trim();
+      const contactPerson = (appState.company.contact || 'N/A').trim();
+      const clientPhone = (appState.company.phone || 'N/A').trim();
+      const evalDate = appState.company.date || new Date().toISOString().split('T')[0];
+      const employeesCount = (appState.company.employees || 'N/A').toString().trim();
+      const evalModality = (appState.company.modality || 'Presencial').trim();
+      const responsibleConsultant = (appState.company.consultant || 'N/A').trim();
+      const techImplementer = (appState.company.techImplementer || 'N/A').trim();
+      const accountingAnalyst = (appState.company.accountingAnalyst || 'N/A').trim();
+
+      const nowStr = new Date().toLocaleTimeString('es-VE', { hour: '2-digit', minute: '2-digit' });
+
+      // Paleta corporativa RGB
+      const NAVY = [27, 42, 74];
+      const TEAL = [43, 91, 108];
+      const SLATE = [59, 77, 107];
+      const LIGHT_BG = [244, 247, 250];
+
+      // 1. Encabezado Corporativo
+      doc.setFillColor(...NAVY);
+      doc.rect(0, 0, 210, 34, 'F');
+
+      doc.setFillColor(...TEAL);
+      doc.rect(0, 34, 210, 3, 'F');
+
+      doc.setTextColor(255, 255, 255);
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(14.5);
+      doc.text('DIAGNÓSTICO TECNOLÓGICO Y OPERATIVO EMPRESARIAL', 14, 14);
+
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(9);
+      doc.setTextColor(220, 232, 242);
+      doc.text('Ruta de Digitalización, Control Administrativo y Pagos Digitales (Venezuela)', 14, 21);
+      doc.text(`Emitido: ${evalDate} • ${nowStr}   |   Consultoría WhatsApp: +58 424-9408721`, 14, 28);
+
+      // 2. Ficha Completa de los 10 Campos de la Empresa
+      doc.setFillColor(...LIGHT_BG);
+      doc.roundedRect(14, 41, 182, 41, 2, 2, 'F');
+      doc.setDrawColor(210, 220, 230);
+      doc.roundedRect(14, 41, 182, 41, 2, 2, 'S');
+
+      doc.setTextColor(...NAVY);
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(8.5);
+      doc.text('1. FICHA GENERAL DE LA EMPRESA EVALUADA', 18, 47);
+
+      doc.setFontSize(8);
+      // Columna Izquierda (5 campos)
+      doc.setFont('helvetica', 'bold');
+      doc.text('Empresa / Razón Social:', 18, 53);
+      doc.setFont('helvetica', 'normal');
+      doc.text(companyName.substring(0, 34), 53, 53);
+
+      doc.setFont('helvetica', 'bold');
+      doc.text('RIF / Sector Comercial:', 18, 59);
+      doc.setFont('helvetica', 'normal');
+      doc.text(companyRif.substring(0, 35), 51, 59);
+
+      doc.setFont('helvetica', 'bold');
+      doc.text('Contacto / Cargo:', 18, 65);
+      doc.setFont('helvetica', 'normal');
+      doc.text(contactPerson.substring(0, 38), 44, 65);
+
+      doc.setFont('helvetica', 'bold');
+      doc.text('Tel. / WhatsApp:', 18, 71);
+      doc.setFont('helvetica', 'normal');
+      doc.text(clientPhone.substring(0, 38), 43, 71);
+
+      doc.setFont('helvetica', 'bold');
+      doc.text('Consultor Responsable:', 18, 77);
+      doc.setFont('helvetica', 'normal');
+      doc.text(responsibleConsultant.substring(0, 34), 52, 77);
+
+      // Columna Derecha (5 campos)
+      doc.setFont('helvetica', 'bold');
+      doc.text('Fecha Diagnóstico:', 114, 53);
+      doc.setFont('helvetica', 'normal');
+      doc.text(evalDate, 143, 53);
+
+      doc.setFont('helvetica', 'bold');
+      doc.text('Empleados Eval.:', 114, 59);
+      doc.setFont('helvetica', 'normal');
+      doc.text(employeesCount, 141, 59);
+
+      doc.setFont('helvetica', 'bold');
+      doc.text('Modalidad Eval.:', 114, 65);
+      doc.setFont('helvetica', 'normal');
+      doc.text(evalModality, 139, 65);
+
+      doc.setFont('helvetica', 'bold');
+      doc.text('Téc. Implementador:', 114, 71);
+      doc.setFont('helvetica', 'normal');
+      doc.text(techImplementer.substring(0, 28), 144, 71);
+
+      doc.setFont('helvetica', 'bold');
+      doc.text('Analista Contable:', 114, 77);
+      doc.setFont('helvetica', 'normal');
+      doc.text(accountingAnalyst.substring(0, 30), 141, 77);
+
+      // 3. Resumen Ejecutivo e Índice Global
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(10);
+      doc.setTextColor(...NAVY);
+      doc.text('2. RESUMEN EJECUTIVO DE MADUREZ EMPRESARIAL', 14, 90);
+
+      const scoreColor = m.globalPct >= 80 ? [16, 125, 85] : m.globalPct >= 50 ? [190, 120, 15] : [185, 35, 55];
+      doc.setFillColor(...scoreColor);
+      doc.roundedRect(14, 93, 54, 32, 2, 2, 'F');
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(7.5);
+      doc.setFont('helvetica', 'bold');
+      doc.text('ÍNDICE GLOBAL', 41, 99.5, { align: 'center' });
+      doc.setFontSize(19);
+      doc.text(`${m.globalPct}%`, 41, 109.5, { align: 'center' });
+      doc.setFontSize(7.5);
+      doc.text(m.classification.label.toUpperCase(), 41, 116, { align: 'center' });
+      doc.setFontSize(6.5);
+      doc.setFont('helvetica', 'normal');
+      doc.text(m.classification.priority, 41, 121, { align: 'center' });
+
+      // Tabla Resumen por Etapa y Pilar
+      doc.autoTable({
+        startY: 93,
+        margin: { left: 72, right: 14 },
+        theme: 'grid',
+        headStyles: { fillColor: NAVY, textColor: 255, fontSize: 7.5, fontStyle: 'bold', halign: 'center' },
+        bodyStyles: { fontSize: 7.5, textColor: [30, 41, 59], cellPadding: 2.2 },
+        columnStyles: {
+          0: { fontStyle: 'bold', cellWidth: 48 },
+          1: { halign: 'center', fontStyle: 'bold', cellWidth: 16 },
+          2: { fontStyle: 'bold', cellWidth: 44 },
+          3: { halign: 'center', fontStyle: 'bold', cellWidth: 16 }
+        },
+        head: [['Etapa Evaluada', 'Avance', 'Pilar de Servicio', 'Avance']],
+        body: [
+          ['Etapa 1: Sistemas Op. + IA', `${m.stageStats.stage1.pct}%`, '1. Configuración e Instalación', `${m.pillarStats.pillar1.pct}%`],
+          ['Etapa 2: Web, Adm. y Cont.', `${m.stageStats.stage2.pct}%`, '2. Capacitación y Adiestramiento', `${m.pillarStats.pillar2.pct}%`],
+          ['Etapa 3: Pagos y RRSS', `${m.stageStats.stage3.pct}%`, '3. Mantenimiento Mensual', `${m.pillarStats.pillar3.pct}%`]
+        ]
+      });
+
+      // 4. Tabla Detallada de los 29 Ítems
+      let nextY = doc.lastAutoTable.finalY + 9;
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(10);
+      doc.setTextColor(...NAVY);
+      doc.text('3. DETALLE DE AUDITORÍA POR ETAPA Y PILAR (29 CRITERIOS)', 14, nextY);
+
+      const detailRows = [];
+      DIAGNOSTIC_DATA.forEach(stage => {
+        detailRows.push([
+          { content: stage.title.toUpperCase(), colSpan: 5, styles: { fillColor: TEAL, textColor: 255, fontStyle: 'bold', fontSize: 8 } }
+        ]);
+
+        stage.pillars.forEach(pillar => {
+          pillar.items.forEach(item => {
+            const resp = appState.responses[item.code] || {};
+            const st = resp.status || 'Sin evaluar';
+            const usage = resp.usage || '-';
+            const obs = resp.note && resp.note.trim() !== ''
+              ? resp.note.trim()
+              : (st === 'No Cumple' || st === 'Parcial' ? item.rec : 'Operativo / Sin novedad');
+
+            detailRows.push([
+              item.code,
+              `${item.title}\n(${pillar.name.replace(/^\d+\.\s*/, '')})`,
+              st,
+              usage,
+              obs
+            ]);
+          });
+        });
+      });
+
+      doc.autoTable({
+        startY: nextY + 3,
+        margin: { left: 14, right: 14 },
+        theme: 'striped',
+        headStyles: { fillColor: SLATE, textColor: 255, fontSize: 7.5, fontStyle: 'bold' },
+        bodyStyles: { fontSize: 7, textColor: [30, 41, 59], cellPadding: 2 },
+        columnStyles: {
+          0: { cellWidth: 14, fontStyle: 'bold', halign: 'center' },
+          1: { cellWidth: 56 },
+          2: { cellWidth: 22, halign: 'center', fontStyle: 'bold' },
+          3: { cellWidth: 28, halign: 'center' },
+          4: { cellWidth: 62 }
+        },
+        head: [['Cód.', 'Criterio / Pilar', 'Estado', 'Uso Empleado', 'Observación / Recomendación']],
+        body: detailRows,
+        didParseCell: function (data) {
+          if (data.section === 'body' && data.column.index === 2) {
+            const val = data.cell.raw;
+            if (val === 'Cumple') data.cell.styles.textColor = [16, 125, 85];
+            else if (val === 'Parcial') data.cell.styles.textColor = [180, 110, 10];
+            else if (val === 'No Cumple') data.cell.styles.textColor = [190, 30, 50];
+          }
+        },
+        didDrawPage: function (data) {
+          const pageCount = doc.internal.getNumberOfPages();
+          doc.setFontSize(7.5);
+          doc.setTextColor(130, 140, 155);
+          doc.text(
+            `Diagnóstico Tecnológico y Operativo Empresarial (Venezuela) • ${companyName} • Página ${data.pageNumber} de ${pageCount}`,
+            105,
+            290,
+            { align: 'center' }
+          );
+        }
+      });
+
+      const safeSlug = companyName
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-zA-Z0-9]+/g, '_')
+        .replace(/^_|_$/g, '') || 'Empresa';
+
+      const fileName = `Diagnostico_${safeSlug}.pdf`;
+      return { doc, fileName, metrics: m };
+    }
+
+    // Descargar PDF
+    function generatePDFReport(notify = true) {
+      if (!window.jspdf) {
+        showToast('Cargando librería PDF, intente nuevamente en un segundo...', 'warning');
+        return null;
+      }
+      const { doc, fileName, metrics } = buildPdfDocument();
+      doc.save(fileName);
+      if (notify) {
+        showToast(`Reporte "${fileName}" descargado exitosamente.`, 'success');
+      }
+      return { doc, fileName, metrics };
+    }
+
+    // Construir mensaje estructurado para WhatsApp
+    function buildWhatsAppMessage(fileName, metrics) {
+      const companyName = (appState.company.name || 'No especificada').trim();
+      const companyRif = (appState.company.rif || 'No especificado').trim();
+      const contactPerson = (appState.company.contact || 'No especificado').trim();
+      const clientPhone = (appState.company.phone || 'No especificado').trim();
+      const evalDate = appState.company.date || new Date().toISOString().split('T')[0];
+      const employeesCount = (appState.company.employees || 'No especificado').toString().trim();
+      const evalModality = (appState.company.modality || 'Presencial').trim();
+      const responsibleConsultant = (appState.company.consultant || 'No especificado').trim();
+      const techImplementer = (appState.company.techImplementer || 'No especificado').trim();
+      const accountingAnalyst = (appState.company.accountingAnalyst || 'No especificado').trim();
+
+      const topGaps = metrics.gaps.slice(0, 6).map(g => `• [${g.code}] ${g.title} (${g.status})`).join('\n');
+
+      let msg = `*DIAGNÓSTICO TECNOLÓGICO Y OPERATIVO EMPRESARIAL (VENEZUELA)*\n\n`;
+      msg += `*1. DATOS GENERALES DE LA EMPRESA:*\n`;
+      msg += `• *Empresa:* ${companyName}\n`;
+      msg += `• *RIF / Sector:* ${companyRif}\n`;
+      msg += `• *Contacto:* ${contactPerson}\n`;
+      msg += `• *Teléfono:* ${clientPhone}\n`;
+      msg += `• *Fecha:* ${evalDate} | *Modalidad:* ${evalModality}\n`;
+      msg += `• *Empleados Evaluados:* ${employeesCount}\n`;
+      msg += `• *Consultor Responsable:* ${responsibleConsultant}\n`;
+      msg += `• *Técnico Implementador:* ${techImplementer}\n`;
+      msg += `• *Analista Contable:* ${accountingAnalyst}\n\n`;
+
+      msg += `*2. RESULTADO GLOBAL:* *${metrics.globalPct}%* (${metrics.classification.label})\n`;
+      msg += `_Prioridad: ${metrics.classification.priority} | Evaluados: ${metrics.totalEvaluated}/29 (Cumple: ${metrics.counts.Cumple} | Parcial: ${metrics.counts.Parcial} | No Cumple: ${metrics.counts['No Cumple']})_\n\n`;
+
+      msg += `*3. AVANCE POR ETAPA:*\n`;
+      msg += `• Etapa 1 (Sistemas Operativos + IA): *${metrics.stageStats.stage1.pct}%*\n`;
+      msg += `• Etapa 2 (Sistemas Web, Adm. y Contables): *${metrics.stageStats.stage2.pct}%*\n`;
+      msg += `• Etapa 3 (Pagos Digitales y RRSS): *${metrics.stageStats.stage3.pct}%*\n\n`;
+
+      msg += `*4. AVANCE POR PILAR DE SERVICIO:*\n`;
+      msg += `• Configuración e Instalación: *${metrics.pillarStats.pillar1.pct}%*\n`;
+      msg += `• Capacitación y Adiestramiento: *${metrics.pillarStats.pillar2.pct}%*\n`;
+      msg += `• Mantenimiento Mensual Programado: *${metrics.pillarStats.pillar3.pct}%*\n\n`;
+
+      if (topGaps) {
+        msg += `*5. PRINCIPALES BRECHAS DETECTADAS:*\n${topGaps}\n\n`;
+      }
+
+      if (fileName) {
+        msg += `📎 *Por favor adjunte en este chat el reporte PDF descargado: ${fileName}*`;
+      } else {
+        msg += `📲 *Solicito asesoría e implementación según los resultados de este diagnóstico.*`;
+      }
+      return msg;
+    }
+
+    // Acción Principal: Descargar PDF y Abrir WhatsApp
+    function downloadPdfAndSendWhatsApp() {
+      const m = computeMetrics();
+      if (m.totalEvaluated === 0) {
+        showToast('Por favor evalúe al menos un criterio antes de generar el reporte.', 'warning');
+        return;
+      }
+
+      const result = generatePDFReport(false);
+      if (!result) return;
+
+      const text = buildWhatsAppMessage(result.fileName, result.metrics);
+      const waUrl = `https://wa.me/${WHATSAPP_TARGET}?text=${encodeURIComponent(text)}`;
+
+      showToast('PDF descargado. Abriendo WhatsApp (+58 424-9408721) — adjunte el PDF en el chat.', 'success');
+
+      setTimeout(() => {
+        window.open(waUrl, '_blank', 'noopener');
+      }, 450);
+    }
+
+    // Acción Secundaria: Solo Enviar Resumen WhatsApp
+    function sendWhatsAppSummaryOnly() {
+      const m = computeMetrics();
+      if (m.totalEvaluated === 0) {
+        showToast('Por favor evalúe al menos un criterio antes de enviar el resumen.', 'warning');
+        return;
+      }
+      const text = buildWhatsAppMessage(null, m);
+      const waUrl = `https://wa.me/${WHATSAPP_TARGET}?text=${encodeURIComponent(text)}`;
+      window.open(waUrl, '_blank', 'noopener');
+    }
+
+    // Navegación suave hacia sección de exportación
+    function scrollToResults() {
+      const el = document.getElementById('resultsExportSection');
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Modal de Reinicio
+    function openResetModal() {
+      const modal = document.getElementById('resetModal');
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      }
+    }
+
+    function closeResetModal() {
+      const modal = document.getElementById('resetModal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+
+    function confirmResetAllData() {
+      appState.company = {
+        name: '',
+        rif: '',
+        contact: '',
+        phone: '',
+        date: new Date().toISOString().split('T')[0],
+        employees: '',
+        modality: 'Presencial',
+        consultant: '',
+        techImplementer: '',
+        accountingAnalyst: ''
+      };
+      appState.responses = {};
+      initDefaultResponses();
+      persistState();
+      bindCompanyInputs();
+      renderChecklist();
+      recalculateAll();
+      closeResetModal();
+      showToast('Formulario y evaluación reiniciados correctamente.', 'info');
+    }
+
+    // Modal GitHub Pages & Descarga de index.html
+    function toggleGithubModal(show) {
+      const modal = document.getElementById('githubModal');
+      if (!modal) return;
+      if (show) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      } else {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+
+    function downloadHtmlFile() {
+      const fullHtml = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+      const blob = new Blob([fullHtml], { type: 'text/html;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'index.html';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast('Archivo index.html descargado para subir a GitHub Pages.', 'success');
+    }
+
+    function copyFullHtmlSource() {
+      const fullHtml = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+      const textarea = document.createElement('textarea');
+      textarea.value = fullHtml;
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        document.execCommand('copy');
+        showToast('Código HTML completo copiado al portapapeles.', 'success');
+      } catch (e) {
+        showToast('No se pudo copiar automáticamente. Use "Descargar Archivo index.html".', 'warning');
+      }
+      document.body.removeChild(textarea);
+    }
+
+    // Notificaciones Toast
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toastContainer');
+      if (!container) return;
+
+      const styles = {
+        success: 'bg-emerald-900 text-emerald-50 border-emerald-500',
+        warning: 'bg-amber-900 text-amber-50 border-amber-500',
+        info: 'bg-[#1B2A4A] text-white border-[#2B5B6C]'
+      };
+
+      const toast = document.createElement('div');
+      toast.className = `toast-enter pointer-events-auto rounded-xl border-l-4 px-4 py-3 shadow-xl text-xs sm:text-sm font-medium ${styles[type] || styles.info}`;
+      toast.textContent = message;
+
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transition = 'opacity 0.3s ease';
+        setTimeout(() => toast.remove(), 300);
+      }, 4200);
+    }
+
+    // Inicialización al cargar la página
+    window.addEventListener('DOMContentLoaded', () => {
+      loadSavedState();
+      bindCompanyInputs();
+      switchStageTab(appState.activeTab || 'stage1');
+      recalculateAll();
+    });
+  </script>
+</body>
+</html>
