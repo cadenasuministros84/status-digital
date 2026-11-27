@@ -73,10 +73,10 @@
 <body class="min-h-screen flex flex-col font-sans antialiased">
 
   <!-- =====================================================================
-       CABECERA CORPORATIVA (SLATE NAVY & TEAL)
+       CABECERA CORPORATIVA LIMPIA (SLATE NAVY & TEAL)
   ====================================================================== -->
   <header class="bg-gradient-to-r from-[#1B2A4A] via-[#22385E] to-[#2B5B6C] text-white shadow-lg sticky top-0 z-30">
-    <div class="max-w-6xl mx-auto px-4 py-3.5 sm:py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+    <div class="max-w-6xl mx-auto px-4 py-3.5 sm:py-4 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
       <div class="flex items-start sm:items-center gap-3">
         <div class="w-11 h-11 rounded-xl bg-white/15 backdrop-blur-sm border border-white/20 flex items-center justify-center shrink-0 shadow-inner">
           <svg class="w-6 h-6 text-amber-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -93,32 +93,38 @@
             </span>
           </div>
           <h1 class="text-base sm:text-xl font-extrabold tracking-tight leading-snug mt-1">
-            Diagnóstico Tecnológico y Operativo Empresarial (Venezuela)
+            Diagnóstico Tecnológico y Operativo Empresarial
           </h1>
+          <p class="text-xs text-slate-200">
+            Evaluación Integral por Etapas: Infraestructura, Gestión Adm-Contable y Ecosistema Digital
+          </p>
         </div>
       </div>
 
-      <!-- Indicador rápido y acceso a GitHub / Resultados -->
-      <div class="flex items-center justify-between sm:justify-end gap-2.5">
-        <div class="flex items-center gap-3 bg-white/10 px-3.5 py-2 rounded-xl border border-white/15">
-          <div class="text-left sm:text-right">
-            <div class="text-[10px] text-slate-200 uppercase font-semibold tracking-wider">Índice Global</div>
-            <div class="flex items-baseline gap-1.5">
-              <span id="headerGlobalScore" class="text-lg sm:text-2xl font-extrabold text-white">0%</span>
-              <span id="headerGlobalBadge" class="text-[10px] sm:text-[11px] font-semibold px-2 py-0.5 rounded-md bg-rose-500/30 text-rose-100">
-                Sin evaluar
-              </span>
-            </div>
-          </div>
-          <button onclick="scrollToResults()" class="px-3 py-2 rounded-lg bg-amber-400 hover:bg-amber-300 text-[#1B2A4A] font-bold text-xs transition shadow-sm shrink-0">
-            Reporte PDF
-          </button>
-        </div>
-
-        <button onclick="toggleGithubModal(true)" class="p-2.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white transition shrink-0" title="Publicar en GitHub Pages">
-          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-            <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
+      <!-- Botones de Acción Operativa -->
+      <div class="flex flex-wrap items-center gap-2">
+        <button type="button" onclick="openResetModal()"
+          class="px-3 py-2 rounded-xl bg-white/10 hover:bg-rose-600/80 border border-white/20 text-white font-semibold text-xs transition flex items-center gap-1.5">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
           </svg>
+          <span>Reiniciar Formulario</span>
+        </button>
+
+        <button type="button" onclick="generatePDFReport(true)"
+          class="px-3.5 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-[#1B2A4A] font-bold text-xs transition shadow-sm flex items-center gap-1.5">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+          <span>Descargar PDF</span>
+        </button>
+
+        <button type="button" onclick="downloadPdfAndSendWhatsApp()"
+          class="px-3.5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-xs transition shadow-sm flex items-center gap-1.5">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824z"/>
+          </svg>
+          <span>Enviar a WhatsApp</span>
         </button>
       </div>
     </div>
@@ -141,9 +147,9 @@
             <p class="text-xs text-slate-300">Complete la ficha técnica para personalizar su reporte ejecutivo en PDF</p>
           </div>
         </div>
-        <button onclick="openResetModal()" class="text-xs bg-white/10 hover:bg-rose-600/80 text-white px-3 py-1.5 rounded-lg border border-white/15 font-semibold transition">
-          Reiniciar / Limpiar Formulario
-        </button>
+        <span class="text-[11px] text-slate-200 bg-white/10 px-2.5 py-1 rounded-lg border border-white/15">
+          10 Campos • Guardado Automático
+        </span>
       </div>
 
       <div class="p-4 sm:p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -251,8 +257,8 @@
         <div class="flex items-center gap-2.5">
           <span class="w-7 h-7 rounded-lg bg-[#1B2A4A] text-white font-bold text-xs flex items-center justify-center border border-white/20">2</span>
           <div>
-            <h2 class="text-sm sm:text-base font-bold">2. Tablero Ejecutivo de Madurez Empresarial (Tiempo Real)</h2>
-            <p class="text-xs text-slate-200">Cálculo ponderado automático por Etapas Operativas y Pilares de Servicio</p>
+            <h2 class="text-sm sm:text-base font-bold">2. Tablero Ejecutivo en Tiempo Real</h2>
+            <p class="text-xs text-slate-200">Índice Global de Madurez y desglose por Etapas y Pilares de Servicio</p>
           </div>
         </div>
         <span id="evaluatedCounterBadge" class="text-xs font-bold px-3 py-1 rounded-full bg-white/15 text-white border border-white/20">
@@ -261,100 +267,168 @@
       </div>
 
       <div class="p-4 sm:p-6 space-y-5">
-        <!-- Fila Superior: Índice Global + Clasificación + Prioridad -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <!-- Tarjeta Índice Global -->
-          <div id="globalCardBox" class="rounded-2xl p-4 sm:p-5 bg-gradient-to-br from-[#1B2A4A] to-[#273B66] text-white flex flex-col justify-between shadow-sm">
-            <div class="flex items-center justify-between">
-              <span class="text-xs font-bold uppercase tracking-wider text-slate-300">Índice Global de Madurez</span>
-              <span class="text-xs px-2 py-0.5 rounded bg-white/10 text-amber-300 font-semibold">29 Criterios</span>
-            </div>
-            <div class="my-3 flex items-baseline gap-3">
-              <span id="dashGlobalPct" class="text-4xl sm:text-5xl font-extrabold tracking-tight">0%</span>
-              <span id="dashMaturityLevel" class="text-xs sm:text-sm font-bold px-2.5 py-1 rounded-lg bg-rose-500/30 text-rose-100 border border-rose-400/30">
-                Rezago Operativo
-              </span>
-            </div>
-            <div class="w-full bg-white/15 rounded-full h-2.5 overflow-hidden">
-              <div id="dashGlobalBar" class="progress-bar-fill h-full bg-rose-400 rounded-full" style="width: 0%"></div>
-            </div>
-            <div class="mt-2.5 flex items-center justify-between text-[11px] text-slate-300">
-              <span id="dashPriorityText">Prioridad: Intervención Urgente</span>
-              <span id="dashScoreCounts">C: 0 | P: 0 | NC: 0</span>
-            </div>
-          </div>
-
-          <!-- Desglose por las 3 Etapas -->
-          <div class="rounded-2xl p-4 sm:p-5 bg-slate-50 border border-slate-200/80 flex flex-col justify-between">
-            <h3 class="text-xs font-extrabold uppercase tracking-wider text-[#1B2A4A] mb-3 flex items-center gap-1.5">
-              <span class="w-2 h-2 rounded-full bg-[#2B5B6C]"></span> Cumplimiento por Etapa
-            </h3>
-            <div class="space-y-3">
-              <div>
-                <div class="flex justify-between text-xs font-semibold mb-1">
-                  <span class="text-slate-700">Etapa 1: Sistemas Op. + IA</span>
-                  <span id="stage1PctText" class="font-bold text-[#1B2A4A]">0%</span>
-                </div>
-                <div class="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
-                  <div id="stage1Bar" class="progress-bar-fill h-full bg-[#2B5B6C] rounded-full" style="width: 0%"></div>
-                </div>
+        <!-- Tarjeta Destacada Índice Global -->
+        <div class="rounded-2xl p-4 sm:p-5 bg-gradient-to-r from-[#1B2A4A] via-[#22385E] to-[#3B4D6B] text-white shadow-sm">
+          <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div class="space-y-1">
+              <span class="text-xs font-bold uppercase tracking-wider text-slate-300">Índice Global de Madurez Empresarial</span>
+              <div class="flex items-baseline gap-3 flex-wrap">
+                <span id="dashGlobalPct" class="text-4xl sm:text-5xl font-extrabold tracking-tight">0%</span>
+                <span id="dashMaturityLevel" class="text-xs sm:text-sm font-bold px-3 py-1 rounded-lg bg-slate-500/30 text-slate-200 border border-slate-400/30">
+                  Sin evaluar
+                </span>
               </div>
+              <p id="dashPriorityText" class="text-xs text-amber-300 font-semibold pt-0.5">
+                Prioridad de Intervención: Pendiente de auditoría
+              </p>
+            </div>
 
-              <div>
-                <div class="flex justify-between text-xs font-semibold mb-1">
-                  <span class="text-slate-700">Etapa 2: Sistemas Web, Adm. y Contables</span>
-                  <span id="stage2PctText" class="font-bold text-[#1B2A4A]">0%</span>
-                </div>
-                <div class="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
-                  <div id="stage2Bar" class="progress-bar-fill h-full bg-[#2B5B6C] rounded-full" style="width: 0%"></div>
-                </div>
+            <div class="w-full md:w-1/2 space-y-2">
+              <div class="flex justify-between text-xs text-slate-200 font-medium">
+                <span>Progreso Ponderado Global</span>
+                <span id="dashScoreCounts">C: 0 | P: 0 | NC: 0 | N/A: 0</span>
               </div>
-
-              <div>
-                <div class="flex justify-between text-xs font-semibold mb-1">
-                  <span class="text-slate-700">Etapa 3: Pagos Digitales y RRSS</span>
-                  <span id="stage3PctText" class="font-bold text-[#1B2A4A]">0%</span>
-                </div>
-                <div class="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
-                  <div id="stage3Bar" class="progress-bar-fill h-full bg-[#2B5B6C] rounded-full" style="width: 0%"></div>
-                </div>
+              <div class="w-full bg-white/15 rounded-full h-3 overflow-hidden">
+                <div id="dashGlobalBar" class="progress-bar-fill h-full bg-slate-400 rounded-full" style="width: 0%"></div>
+              </div>
+              <div class="flex justify-between text-[10px] text-slate-300">
+                <span>&lt;50% Rezago Operativo</span>
+                <span>50-79.9% Transición Digital</span>
+                <span>&ge;80% Empresa Digitalizada</span>
               </div>
             </div>
           </div>
+        </div>
 
-          <!-- Desglose por los 3 Pilares de Servicio -->
-          <div class="rounded-2xl p-4 sm:p-5 bg-slate-50 border border-slate-200/80 flex flex-col justify-between">
-            <h3 class="text-xs font-extrabold uppercase tracking-wider text-[#1B2A4A] mb-3 flex items-center gap-1.5">
-              <span class="w-2 h-2 rounded-full bg-amber-500"></span> Cumplimiento por Pilar de Servicio
-            </h3>
-            <div class="space-y-3">
+        <!-- 3 Tarjetas Resumen por Etapa con Desglose por Pilares -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          <!-- Etapa 1 -->
+          <div class="rounded-2xl p-4 bg-slate-50 border border-slate-200/90 flex flex-col justify-between space-y-3">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-1.5">
+                <span class="text-[11px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded bg-[#1B2A4A] text-white">Etapa 1</span>
+                <span id="stage1PctText" class="text-lg font-extrabold text-rose-600">0%</span>
+              </div>
+              <h3 class="text-xs sm:text-sm font-bold text-[#1B2A4A]">Sistemas Operativos e Infraestructura + IA</h3>
+              <div class="w-full bg-slate-200 rounded-full h-2 overflow-hidden mt-2">
+                <div id="stage1Bar" class="progress-bar-fill h-full bg-rose-500 rounded-full" style="width: 0%"></div>
+              </div>
+            </div>
+
+            <div class="pt-2 border-t border-slate-200/80 space-y-2 text-xs">
               <div>
-                <div class="flex justify-between text-xs font-semibold mb-1">
-                  <span class="text-slate-700">1. Configuración e Instalación</span>
-                  <span id="pillar1PctText" class="font-bold text-[#1B2A4A]">0%</span>
+                <div class="flex justify-between font-medium text-slate-600 mb-0.5">
+                  <span>1. Configuración e Instalación</span>
+                  <span id="s1p1Pct" class="font-bold text-slate-800">0%</span>
                 </div>
-                <div class="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
-                  <div id="pillar1Bar" class="progress-bar-fill h-full bg-[#1B2A4A] rounded-full" style="width: 0%"></div>
+                <div class="w-full bg-slate-200 rounded-full h-1.5 overflow-hidden">
+                  <div id="s1p1Bar" class="progress-bar-fill h-full bg-rose-500 rounded-full" style="width: 0%"></div>
                 </div>
               </div>
-
               <div>
-                <div class="flex justify-between text-xs font-semibold mb-1">
-                  <span class="text-slate-700">2. Capacitación y Adiestramiento</span>
-                  <span id="pillar2PctText" class="font-bold text-[#1B2A4A]">0%</span>
+                <div class="flex justify-between font-medium text-slate-600 mb-0.5">
+                  <span>2. Capacitación y Adiestramiento</span>
+                  <span id="s1p2Pct" class="font-bold text-slate-800">0%</span>
                 </div>
-                <div class="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
-                  <div id="pillar2Bar" class="progress-bar-fill h-full bg-[#1B2A4A] rounded-full" style="width: 0%"></div>
+                <div class="w-full bg-slate-200 rounded-full h-1.5 overflow-hidden">
+                  <div id="s1p2Bar" class="progress-bar-fill h-full bg-rose-500 rounded-full" style="width: 0%"></div>
                 </div>
               </div>
-
               <div>
-                <div class="flex justify-between text-xs font-semibold mb-1">
-                  <span class="text-slate-700">3. Mantenimiento Mensual Programado</span>
-                  <span id="pillar3PctText" class="font-bold text-[#1B2A4A]">0%</span>
+                <div class="flex justify-between font-medium text-slate-600 mb-0.5">
+                  <span>3. Mantenimiento Mensual</span>
+                  <span id="s1p3Pct" class="font-bold text-slate-800">0%</span>
                 </div>
-                <div class="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
-                  <div id="pillar3Bar" class="progress-bar-fill h-full bg-[#1B2A4A] rounded-full" style="width: 0%"></div>
+                <div class="w-full bg-slate-200 rounded-full h-1.5 overflow-hidden">
+                  <div id="s1p3Bar" class="progress-bar-fill h-full bg-rose-500 rounded-full" style="width: 0%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Etapa 2 -->
+          <div class="rounded-2xl p-4 bg-slate-50 border border-slate-200/90 flex flex-col justify-between space-y-3">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-1.5">
+                <span class="text-[11px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded bg-[#2B5B6C] text-white">Etapa 2</span>
+                <span id="stage2PctText" class="text-lg font-extrabold text-rose-600">0%</span>
+              </div>
+              <h3 class="text-xs sm:text-sm font-bold text-[#1B2A4A]">Sistemas Web, Adm. y Contables + IA</h3>
+              <div class="w-full bg-slate-200 rounded-full h-2 overflow-hidden mt-2">
+                <div id="stage2Bar" class="progress-bar-fill h-full bg-rose-500 rounded-full" style="width: 0%"></div>
+              </div>
+            </div>
+
+            <div class="pt-2 border-t border-slate-200/80 space-y-2 text-xs">
+              <div>
+                <div class="flex justify-between font-medium text-slate-600 mb-0.5">
+                  <span>1. Configuración e Instalación</span>
+                  <span id="s2p1Pct" class="font-bold text-slate-800">0%</span>
+                </div>
+                <div class="w-full bg-slate-200 rounded-full h-1.5 overflow-hidden">
+                  <div id="s2p1Bar" class="progress-bar-fill h-full bg-rose-500 rounded-full" style="width: 0%"></div>
+                </div>
+              </div>
+              <div>
+                <div class="flex justify-between font-medium text-slate-600 mb-0.5">
+                  <span>2. Capacitación y Adiestramiento</span>
+                  <span id="s2p2Pct" class="font-bold text-slate-800">0%</span>
+                </div>
+                <div class="w-full bg-slate-200 rounded-full h-1.5 overflow-hidden">
+                  <div id="s2p2Bar" class="progress-bar-fill h-full bg-rose-500 rounded-full" style="width: 0%"></div>
+                </div>
+              </div>
+              <div>
+                <div class="flex justify-between font-medium text-slate-600 mb-0.5">
+                  <span>3. Mantenimiento Mensual</span>
+                  <span id="s2p3Pct" class="font-bold text-slate-800">0%</span>
+                </div>
+                <div class="w-full bg-slate-200 rounded-full h-1.5 overflow-hidden">
+                  <div id="s2p3Bar" class="progress-bar-fill h-full bg-rose-500 rounded-full" style="width: 0%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Etapa 3 -->
+          <div class="rounded-2xl p-4 bg-slate-50 border border-slate-200/90 flex flex-col justify-between space-y-3">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-1.5">
+                <span class="text-[11px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded bg-[#3B4D6B] text-white">Etapa 3</span>
+                <span id="stage3PctText" class="text-lg font-extrabold text-rose-600">0%</span>
+              </div>
+              <h3 class="text-xs sm:text-sm font-bold text-[#1B2A4A]">Pagos Digitales y Redes Sociales</h3>
+              <div class="w-full bg-slate-200 rounded-full h-2 overflow-hidden mt-2">
+                <div id="stage3Bar" class="progress-bar-fill h-full bg-rose-500 rounded-full" style="width: 0%"></div>
+              </div>
+            </div>
+
+            <div class="pt-2 border-t border-slate-200/80 space-y-2 text-xs">
+              <div>
+                <div class="flex justify-between font-medium text-slate-600 mb-0.5">
+                  <span>1. Configuración e Instalación</span>
+                  <span id="s3p1Pct" class="font-bold text-slate-800">0%</span>
+                </div>
+                <div class="w-full bg-slate-200 rounded-full h-1.5 overflow-hidden">
+                  <div id="s3p1Bar" class="progress-bar-fill h-full bg-rose-500 rounded-full" style="width: 0%"></div>
+                </div>
+              </div>
+              <div>
+                <div class="flex justify-between font-medium text-slate-600 mb-0.5">
+                  <span>2. Capacitación y Adiestramiento</span>
+                  <span id="s3p2Pct" class="font-bold text-slate-800">0%</span>
+                </div>
+                <div class="w-full bg-slate-200 rounded-full h-1.5 overflow-hidden">
+                  <div id="s3p2Bar" class="progress-bar-fill h-full bg-rose-500 rounded-full" style="width: 0%"></div>
+                </div>
+              </div>
+              <div>
+                <div class="flex justify-between font-medium text-slate-600 mb-0.5">
+                  <span>3. Mantenimiento Mensual</span>
+                  <span id="s3p3Pct" class="font-bold text-slate-800">0%</span>
+                </div>
+                <div class="w-full bg-slate-200 rounded-full h-1.5 overflow-hidden">
+                  <div id="s3p3Bar" class="progress-bar-fill h-full bg-rose-500 rounded-full" style="width: 0%"></div>
                 </div>
               </div>
             </div>
@@ -372,28 +446,28 @@
           <span class="w-7 h-7 rounded-lg bg-[#2B5B6C] text-white font-bold text-xs flex items-center justify-center border border-white/20">3</span>
           <div>
             <h2 class="text-sm sm:text-base font-bold">3. Lista de Chequeo Interactiva (29 Criterios de Auditoría)</h2>
-            <p class="text-xs text-slate-300">Seleccione el estado actual, nivel de dominio del personal y registre hallazgos</p>
+            <p class="text-xs text-slate-300">Evalúe cada criterio, nivel de uso del empleado y registre hallazgos u observaciones</p>
           </div>
         </div>
       </div>
 
-      <!-- Barra de Navegación por Etapas + Vista Completa -->
+      <!-- Pestañas / Filtros por Etapa -->
       <div class="bg-slate-100 border-b border-slate-200 px-3 sm:px-5 pt-3 flex items-center gap-2 overflow-x-auto no-scrollbar">
-        <button id="tab-stage1" onclick="switchStageTab('stage1')"
+        <button type="button" id="tab-all" onclick="switchStageTab('all')"
+          class="stage-tab px-4 py-2.5 rounded-t-xl text-xs sm:text-sm font-bold whitespace-nowrap transition border-b-2">
+          Todas (29)
+        </button>
+        <button type="button" id="tab-stage1" onclick="switchStageTab('stage1')"
           class="stage-tab px-4 py-2.5 rounded-t-xl text-xs sm:text-sm font-bold whitespace-nowrap transition border-b-2">
           Etapa 1: Sistemas Op. + IA (10)
         </button>
-        <button id="tab-stage2" onclick="switchStageTab('stage2')"
+        <button type="button" id="tab-stage2" onclick="switchStageTab('stage2')"
           class="stage-tab px-4 py-2.5 rounded-t-xl text-xs sm:text-sm font-bold whitespace-nowrap transition border-b-2">
           Etapa 2: Adm. y Contables (10)
         </button>
-        <button id="tab-stage3" onclick="switchStageTab('stage3')"
+        <button type="button" id="tab-stage3" onclick="switchStageTab('stage3')"
           class="stage-tab px-4 py-2.5 rounded-t-xl text-xs sm:text-sm font-bold whitespace-nowrap transition border-b-2">
           Etapa 3: Pagos y RRSS (9)
-        </button>
-        <button id="tab-all" onclick="switchStageTab('all')"
-          class="stage-tab px-4 py-2.5 rounded-t-xl text-xs sm:text-sm font-bold whitespace-nowrap transition border-b-2">
-          Vista Completa (29)
         </button>
       </div>
 
@@ -414,13 +488,12 @@
             Generar Reporte Ejecutivo en PDF y Enviar por WhatsApp
           </h2>
           <p class="text-xs sm:text-sm text-slate-200 leading-relaxed">
-            Al pulsar el botón principal se descargará automáticamente el <strong>Reporte PDF completo</strong> con los 10 datos de la empresa, métricas por etapa/pilar y los 29 criterios auditados, abriendo WhatsApp directo al <strong>+58 424-9408721</strong> con el resumen ejecutivo listo para adjuntar el PDF.
+            Descargue el <strong>Reporte PDF completo</strong> con los 10 datos de la empresa, métricas de madurez por etapa y pilar, y los 29 criterios auditados, o envíelo directamente al WhatsApp <strong>+58 424-9408721</strong> con el resumen estructurado.
           </p>
         </div>
 
         <div class="flex flex-col sm:flex-row lg:flex-col gap-2.5 shrink-0">
-          <!-- Botón Principal -->
-          <button onclick="downloadPdfAndSendWhatsApp()"
+          <button type="button" onclick="downloadPdfAndSendWhatsApp()"
             class="px-5 py-3.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 active:scale-[0.99] text-slate-950 font-extrabold text-sm shadow-lg shadow-emerald-950/30 flex items-center justify-center gap-2.5 transition">
             <svg class="w-5 h-5 shrink-0" fill="currentColor" viewBox="0 0 24 24">
               <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824z"/>
@@ -428,9 +501,8 @@
             <span>Descargar PDF y Enviar a WhatsApp (+58 424-9408721)</span>
           </button>
 
-          <!-- Botones Secundarios -->
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-            <button onclick="generatePDFReport(true)"
+            <button type="button" onclick="generatePDFReport(true)"
               class="px-4 py-2.5 rounded-xl bg-white/15 hover:bg-white/25 text-white font-bold text-xs border border-white/20 flex items-center justify-center gap-1.5 transition">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -438,12 +510,12 @@
               <span>Solo Descargar PDF</span>
             </button>
 
-            <button onclick="sendWhatsAppSummaryOnly()"
+            <button type="button" onclick="sendWhatsAppSummaryOnly()"
               class="px-4 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-[#1B2A4A] font-bold text-xs flex items-center justify-center gap-1.5 transition">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
               </svg>
-              <span>Solo Enviar Resumen WhatsApp</span>
+              <span>Solo Resumen WhatsApp</span>
             </button>
           </div>
         </div>
@@ -452,70 +524,36 @@
   </main>
 
   <!-- =====================================================================
-       FOOTER CORPORATIVO
+       PIE DE PÁGINA CORPORATIVO LIMPIO
   ====================================================================== -->
   <footer class="bg-[#1B2A4A] text-slate-300 py-5 px-4 mt-8 border-t border-slate-800">
     <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-xs">
       <p class="font-medium text-center sm:text-left">
-        Diagnóstico Tecnológico y Operativo Empresarial • Ruta de Digitalización (Venezuela)
+        &copy; <span id="currentYear"></span> Diagnóstico Tecnológico y Operativo Empresarial • Herramienta de Auditoría y Transformación Digital (Venezuela).
       </p>
-      <div class="flex items-center gap-4">
-        <button onclick="toggleGithubModal(true)" class="text-amber-300 hover:underline font-semibold">
-          Guía GitHub Pages
-        </button>
-        <a href="https://wa.me/584249408721" target="_blank" rel="noopener" class="text-emerald-300 font-bold hover:underline">
-          WhatsApp: +58 424-9408721
-        </a>
-      </div>
+      <a href="https://wa.me/584249408721" target="_blank" rel="noopener" class="text-emerald-300 font-bold hover:underline">
+        Consultoría Directa: +58 424-9408721
+      </a>
     </div>
   </footer>
 
   <!-- =====================================================================
-       MODAL DE CONFIRMACIÓN PARA REINICIAR FORMULARIO (SIN confirm())
+       MODAL DE CONFIRMACIÓN PARA REINICIAR FORMULARIO
   ====================================================================== -->
   <div id="resetModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden items-center justify-center p-4">
     <div class="bg-white rounded-2xl max-w-md w-full shadow-2xl border border-slate-200 overflow-hidden">
       <div class="bg-[#1B2A4A] text-white px-5 py-3.5 flex items-center justify-between">
         <h3 class="font-bold text-sm sm:text-base">Confirmar Reinicio de Diagnóstico</h3>
-        <button onclick="closeResetModal()" class="text-slate-300 hover:text-white text-xl leading-none px-2">&times;</button>
+        <button type="button" onclick="closeResetModal()" class="text-slate-300 hover:text-white text-xl leading-none px-2">&times;</button>
       </div>
       <div class="p-5 space-y-4 text-sm text-slate-700">
         <p>¿Está seguro de que desea limpiar todos los datos de la empresa y borrar las respuestas de los 29 criterios evaluados?</p>
         <div class="flex justify-end gap-2">
-          <button onclick="closeResetModal()" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs transition">
+          <button type="button" onclick="closeResetModal()" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs transition">
             Cancelar
           </button>
-          <button onclick="confirmResetAllData()" class="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs transition">
+          <button type="button" onclick="confirmResetAllData()" class="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs transition">
             Sí, Limpiar Todo
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- =====================================================================
-       MODAL DE INSTRUCCIONES GITHUB PAGES & DESCARGA DE CÓDIGO FUENTE
-  ====================================================================== -->
-  <div id="githubModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-lg w-full shadow-2xl border border-slate-200 overflow-hidden">
-      <div class="bg-[#1B2A4A] text-white px-5 py-4 flex items-center justify-between">
-        <h3 class="font-bold text-sm sm:text-base">Publicar Sitio Web en GitHub Pages</h3>
-        <button onclick="toggleGithubModal(false)" class="text-slate-300 hover:text-white text-xl leading-none px-2">&times;</button>
-      </div>
-      <div class="p-5 space-y-3 text-xs sm:text-sm text-slate-700">
-        <p>Esta aplicación está diseñada en <strong>un único archivo autónomo (<code class="bg-slate-100 px-1.5 py-0.5 rounded font-mono text-[#1B2A4A]">index.html</code>)</strong> listo para alojarse gratis en GitHub Pages:</p>
-        <ol class="list-decimal list-inside space-y-1.5 bg-slate-50 p-3.5 rounded-xl border border-slate-200 text-xs">
-          <li>Cree un repositorio público en <strong>GitHub</strong> (ejemplo: <code class="font-mono">diagnostico-empresarial</code>).</li>
-          <li>Suba este archivo con el nombre exacto <strong><code class="font-mono">index.html</code></strong> en la raíz del repositorio.</li>
-          <li>Vaya a <strong>Settings &rarr; Pages &rarr; Source</strong>, elija la rama <code class="font-mono">main</code> y carpeta <code class="font-mono">/ (root)</code>, y haga clic en <strong>Save</strong>.</li>
-          <li>En menos de 1 minuto obtendrá su URL pública para compartir en estados y chats de WhatsApp.</li>
-        </ol>
-        <div class="flex flex-col sm:flex-row gap-2 pt-2">
-          <button onclick="downloadHtmlFile()" class="flex-1 px-4 py-2.5 rounded-xl bg-[#1B2A4A] hover:bg-[#2B5B6C] text-white font-bold text-xs transition">
-            Descargar Archivo index.html
-          </button>
-          <button onclick="copyFullHtmlSource()" class="flex-1 px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-[#1B2A4A] font-bold text-xs transition">
-            Copiar Código HTML
           </button>
         </div>
       </div>
@@ -530,7 +568,7 @@
   ====================================================================== -->
   <script>
     const WHATSAPP_TARGET = '584249408721';
-    const STORAGE_KEY = 'diagnostico_empresarial_vzla_v2';
+    const STORAGE_KEY = 'diagnostico_empresarial_vzla_clean_v1';
 
     // Estructura completa de las 3 Etapas, 3 Pilares y 29 Ítems
     const DIAGNOSTIC_DATA = [
@@ -632,15 +670,15 @@
             items: [
               {
                 code: 'E2-01',
-                title: 'Instalación de Sistema Administrativo y Contable',
+                title: 'Instalación de Sistema Administrativo y Contable (ERP)',
                 desc: 'ERP/sistema parametrizado (plan de cuentas, almacenes, listas de precios, centros de costo).',
                 rec: 'Parametrizar integralmente el sistema administrativo/contable y depurar maestros de inventario y clientes.'
               },
               {
                 code: 'E2-02',
-                title: 'Cumplimiento Fiscal Venezuela (SENIAT / IGTF / IVA)',
-                desc: 'Alícuotas vigentes, retenciones IVA/ISLR, libros legales, máquina fiscal o facturación digital.',
-                rec: 'Auditar y configurar reglas tributarias SENIAT (IVA, IGTF, retenciones e impresora/imprenta digital).'
+                title: 'Cumplimiento Fiscal Venezuela (SENIAT / IGTF / IVA / HKA)',
+                desc: 'Alícuotas vigentes, retenciones IVA/ISLR, libros legales, máquina fiscal HKA o facturación digital.',
+                rec: 'Auditar y configurar reglas tributarias SENIAT (IVA, IGTF, retenciones e impresora fiscal HKA / imprenta digital).'
               },
               {
                 code: 'E2-03',
@@ -803,7 +841,7 @@
         accountingAnalyst: ''
       },
       responses: {},
-      activeTab: 'stage1'
+      activeTab: 'all'
     };
 
     // Inicializar respuestas vacías
@@ -915,7 +953,7 @@
       stagesToRender.forEach(stage => {
         html += `
           <div class="space-y-5">
-            <div class="border-l-4 border-[#2B5B6C] pl-3.5 py-1 bg-[#EBF3F5]/60 rounded-r-xl">
+            <div class="border-l-4 border-[#2B5B6C] pl-3.5 py-1.5 bg-[#EBF3F5]/60 rounded-r-xl">
               <h3 class="text-sm sm:text-base font-extrabold text-[#1B2A4A]">${stage.title}</h3>
               <p class="text-xs text-slate-600">${stage.subtitle}</p>
             </div>
@@ -956,9 +994,8 @@
               : 'border-slate-200 bg-white';
 
             html += `
-              <div id="card-${item.code}" class="rounded-xl border ${cardBorder} p-3.5 sm:p-4 transition shadow-2xs">
+              <div id="card-${item.code}" class="rounded-xl border ${cardBorder} p-3.5 sm:p-4 transition">
                 <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-3">
-                  <!-- Descripción del criterio -->
                   <div class="space-y-1 flex-1">
                     <div class="flex items-center gap-2 flex-wrap">
                       <span class="text-[11px] font-extrabold px-2 py-0.5 rounded bg-[#1B2A4A] text-white font-mono">
@@ -969,7 +1006,6 @@
                     <p class="text-xs text-slate-600 leading-relaxed">${item.desc}</p>
                   </div>
 
-                  <!-- Botones de Estado Actual -->
                   <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5 shrink-0">
                     <button type="button" onclick="setItemStatus('${item.code}', 'Cumple')" class="${btnBase} ${cumpleCls}">
                       <span>✓</span> Cumple
@@ -986,7 +1022,6 @@
                   </div>
                 </div>
 
-                <!-- Fila inferior: Nivel de Uso Empleado + Hallazgos/Observaciones -->
                 <div class="mt-3 pt-3 border-t border-slate-200/70 grid grid-cols-1 sm:grid-cols-12 gap-2.5">
                   <div class="sm:col-span-4">
                     <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-1">
@@ -1004,7 +1039,7 @@
 
                   <div class="sm:col-span-8">
                     <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-1">
-                      Hallazgos / Brechas Detectadas y Acción Recomendada
+                      Hallazgos / Observaciones
                     </label>
                     <input type="text" value="${escapeHtml(resp.note || '')}"
                       oninput="setItemNote('${item.code}', this.value)"
@@ -1039,7 +1074,6 @@
       if (!appState.responses[code]) {
         appState.responses[code] = { status: null, usage: '', note: '' };
       }
-      // Permitir desmarcar si vuelve a pulsar el mismo estado
       appState.responses[code].status = appState.responses[code].status === status ? null : status;
       persistState();
       renderChecklist();
@@ -1064,7 +1098,21 @@
       persistState();
     }
 
-    // Cálculo Ponderado Global, por Etapas y por Pilares
+    // Helpers de colores semánticos (verde >=80%, ámbar 50-79.9%, rojo <50%)
+    function getSemanticColors(pct, hasEvaluated = true) {
+      if (!hasEvaluated) {
+        return { text: 'text-slate-500', bar: 'bg-slate-400' };
+      }
+      if (pct >= 80) {
+        return { text: 'text-emerald-600', bar: 'bg-emerald-500' };
+      }
+      if (pct >= 50) {
+        return { text: 'text-amber-600', bar: 'bg-amber-500' };
+      }
+      return { text: 'text-rose-600', bar: 'bg-rose-500' };
+    }
+
+    // Cálculo Ponderado Global, por Etapas, por Pilares y Matriz Etapa x Pilar
     function computeMetrics() {
       let totalPoints = 0;
       let totalValidItems = 0;
@@ -1072,9 +1120,9 @@
 
       const counts = { Cumple: 0, Parcial: 0, 'No Cumple': 0, 'N/A': 0 };
       const stageStats = {
-        stage1: { points: 0, valid: 0, pct: 0 },
-        stage2: { points: 0, valid: 0, pct: 0 },
-        stage3: { points: 0, valid: 0, pct: 0 }
+        stage1: { points: 0, valid: 0, pct: 0, pillars: { pillar1: { points: 0, valid: 0, pct: 0 }, pillar2: { points: 0, valid: 0, pct: 0 }, pillar3: { points: 0, valid: 0, pct: 0 } } },
+        stage2: { points: 0, valid: 0, pct: 0, pillars: { pillar1: { points: 0, valid: 0, pct: 0 }, pillar2: { points: 0, valid: 0, pct: 0 }, pillar3: { points: 0, valid: 0, pct: 0 } } },
+        stage3: { points: 0, valid: 0, pct: 0, pillars: { pillar1: { points: 0, valid: 0, pct: 0 }, pillar2: { points: 0, valid: 0, pct: 0 }, pillar3: { points: 0, valid: 0, pct: 0 } } }
       };
       const pillarStats = {
         pillar1: { points: 0, valid: 0, pct: 0 },
@@ -1102,6 +1150,9 @@
               stageStats[stage.id].points += pts;
               stageStats[stage.id].valid += 1;
 
+              stageStats[stage.id].pillars[pillar.id].points += pts;
+              stageStats[stage.id].pillars[pillar.id].valid += 1;
+
               pillarStats[pillar.id].points += pts;
               pillarStats[pillar.id].valid += 1;
 
@@ -1122,10 +1173,13 @@
 
       const globalPct = totalValidItems > 0 ? Math.round((totalPoints / totalValidItems) * 100) : 0;
 
-      Object.keys(stageStats).forEach(k => {
-        stageStats[k].pct = stageStats[k].valid > 0
-          ? Math.round((stageStats[k].points / stageStats[k].valid) * 100)
-          : 0;
+      Object.keys(stageStats).forEach(sKey => {
+        const sObj = stageStats[sKey];
+        sObj.pct = sObj.valid > 0 ? Math.round((sObj.points / sObj.valid) * 100) : 0;
+        Object.keys(sObj.pillars).forEach(pKey => {
+          const spObj = sObj.pillars[pKey];
+          spObj.pct = spObj.valid > 0 ? Math.round((spObj.points / spObj.valid) * 100) : 0;
+        });
       });
 
       Object.keys(pillarStats).forEach(k => {
@@ -1138,10 +1192,10 @@
         label: 'Rezago Operativo',
         priority: 'Intervención Urgente',
         badgeClass: 'bg-rose-500/30 text-rose-100 border-rose-400/30',
-        barClass: 'bg-rose-400'
+        barClass: 'bg-rose-500'
       };
 
-      if (totalEvaluated === 0) {
+      if (totalValidItems === 0) {
         classification = {
           label: 'Sin evaluar',
           priority: 'Pendiente de auditoría',
@@ -1176,24 +1230,13 @@
       };
     }
 
-    // Actualizar interfaz del Tablero Ejecutivo y Cabecera
+    // Actualizar interfaz del Tablero Ejecutivo en Tiempo Real
     function recalculateAll() {
       const m = computeMetrics();
 
-      // Cabecera
-      const hScore = document.getElementById('headerGlobalScore');
-      const hBadge = document.getElementById('headerGlobalBadge');
-      if (hScore) hScore.textContent = `${m.globalPct}%`;
-      if (hBadge) {
-        hBadge.textContent = m.classification.label;
-        hBadge.className = `text-[10px] sm:text-[11px] font-semibold px-2 py-0.5 rounded-md border ${m.classification.badgeClass}`;
-      }
-
-      // Contador ítems evaluados
       const evalBadge = document.getElementById('evaluatedCounterBadge');
       if (evalBadge) evalBadge.textContent = `${m.totalEvaluated} / 29 Ítems Evaluados`;
 
-      // Tarjeta Global
       const dPct = document.getElementById('dashGlobalPct');
       const dLevel = document.getElementById('dashMaturityLevel');
       const dBar = document.getElementById('dashGlobalBar');
@@ -1203,31 +1246,51 @@
       if (dPct) dPct.textContent = `${m.globalPct}%`;
       if (dLevel) {
         dLevel.textContent = m.classification.label;
-        dLevel.className = `text-xs sm:text-sm font-bold px-2.5 py-1 rounded-lg border ${m.classification.badgeClass}`;
+        dLevel.className = `text-xs sm:text-sm font-bold px-3 py-1 rounded-lg border ${m.classification.badgeClass}`;
       }
       if (dBar) {
         dBar.style.width = `${m.globalPct}%`;
         dBar.className = `progress-bar-fill h-full rounded-full ${m.classification.barClass}`;
       }
-      if (dPrio) dPrio.textContent = `Prioridad: ${m.classification.priority}`;
-      if (dCounts) dCounts.textContent = `C: ${m.counts.Cumple} | P: ${m.counts.Parcial} | NC: ${m.counts['No Cumple']}`;
+      if (dPrio) dPrio.textContent = `Prioridad de Intervención: ${m.classification.priority}`;
+      if (dCounts) dCounts.textContent = `C: ${m.counts.Cumple} | P: ${m.counts.Parcial} | NC: ${m.counts['No Cumple']} | N/A: ${m.counts['N/A']}`;
 
-      // Barras por Etapa
-      ['stage1', 'stage2', 'stage3'].forEach(stKey => {
-        const pct = m.stageStats[stKey].pct;
-        const txtEl = document.getElementById(`${stKey}PctText`);
-        const barEl = document.getElementById(`${stKey}Bar`);
-        if (txtEl) txtEl.textContent = `${pct}%`;
-        if (barEl) barEl.style.width = `${pct}%`;
-      });
+      // Actualizar las 3 tarjetas de Etapa y sus 3 pilares internos
+      const stageMap = [
+        { key: 'stage1', prefix: 's1' },
+        { key: 'stage2', prefix: 's2' },
+        { key: 'stage3', prefix: 's3' }
+      ];
 
-      // Barras por Pilar
-      ['pillar1', 'pillar2', 'pillar3'].forEach(pKey => {
-        const pct = m.pillarStats[pKey].pct;
-        const txtEl = document.getElementById(`${pKey}PctText`);
-        const barEl = document.getElementById(`${pKey}Bar`);
-        if (txtEl) txtEl.textContent = `${pct}%`;
-        if (barEl) barEl.style.width = `${pct}%`;
+      stageMap.forEach(({ key, prefix }) => {
+        const sData = m.stageStats[key];
+        const sColors = getSemanticColors(sData.pct, sData.valid > 0);
+
+        const txtEl = document.getElementById(`${key}PctText`);
+        const barEl = document.getElementById(`${key}Bar`);
+        if (txtEl) {
+          txtEl.textContent = `${sData.pct}%`;
+          txtEl.className = `text-lg font-extrabold ${sColors.text}`;
+        }
+        if (barEl) {
+          barEl.style.width = `${sData.pct}%`;
+          barEl.className = `progress-bar-fill h-full rounded-full ${sColors.bar}`;
+        }
+
+        ['pillar1', 'pillar2', 'pillar3'].forEach((pKey, idx) => {
+          const pData = sData.pillars[pKey];
+          const pColors = getSemanticColors(pData.pct, pData.valid > 0);
+          const pTxt = document.getElementById(`${prefix}p${idx + 1}Pct`);
+          const pBar = document.getElementById(`${prefix}p${idx + 1}Bar`);
+          if (pTxt) {
+            pTxt.textContent = `${pData.pct}%`;
+            pTxt.className = `font-bold ${pColors.text}`;
+          }
+          if (pBar) {
+            pBar.style.width = `${pData.pct}%`;
+            pBar.className = `progress-bar-fill h-full rounded-full ${pColors.bar}`;
+          }
+        });
       });
     }
 
@@ -1250,7 +1313,6 @@
 
       const nowStr = new Date().toLocaleTimeString('es-VE', { hour: '2-digit', minute: '2-digit' });
 
-      // Paleta corporativa RGB
       const NAVY = [27, 42, 74];
       const TEAL = [43, 91, 108];
       const SLATE = [59, 77, 107];
@@ -1269,9 +1331,9 @@
       doc.text('DIAGNÓSTICO TECNOLÓGICO Y OPERATIVO EMPRESARIAL', 14, 14);
 
       doc.setFont('helvetica', 'normal');
-      doc.setFontSize(9);
+      doc.setFontSize(8.8);
       doc.setTextColor(220, 232, 242);
-      doc.text('Ruta de Digitalización, Control Administrativo y Pagos Digitales (Venezuela)', 14, 21);
+      doc.text('Evaluación Integral por Etapas: Infraestructura, Gestión Adm-Contable y Ecosistema Digital', 14, 21);
       doc.text(`Emitido: ${evalDate} • ${nowStr}   |   Consultoría WhatsApp: +58 424-9408721`, 14, 28);
 
       // 2. Ficha Completa de los 10 Campos de la Empresa
@@ -1389,10 +1451,6 @@
 
       const detailRows = [];
       DIAGNOSTIC_DATA.forEach(stage => {
-        detailRows.push([
-          { content: stage.title.toUpperCase(), colSpan: 5, styles: { fillColor: TEAL, textColor: 255, fontStyle: 'bold', fontSize: 8 } }
-        ]);
-
         stage.pillars.forEach(pillar => {
           pillar.items.forEach(item => {
             const resp = appState.responses[item.code] || {};
@@ -1404,6 +1462,7 @@
 
             detailRows.push([
               item.code,
+              stage.shortTitle,
               `${item.title}\n(${pillar.name.replace(/^\d+\.\s*/, '')})`,
               st,
               usage,
@@ -1417,19 +1476,20 @@
         startY: nextY + 3,
         margin: { left: 14, right: 14 },
         theme: 'striped',
-        headStyles: { fillColor: SLATE, textColor: 255, fontSize: 7.5, fontStyle: 'bold' },
-        bodyStyles: { fontSize: 7, textColor: [30, 41, 59], cellPadding: 2 },
+        headStyles: { fillColor: SLATE, textColor: 255, fontSize: 7.3, fontStyle: 'bold' },
+        bodyStyles: { fontSize: 6.9, textColor: [30, 41, 59], cellPadding: 1.9 },
         columnStyles: {
-          0: { cellWidth: 14, fontStyle: 'bold', halign: 'center' },
-          1: { cellWidth: 56 },
-          2: { cellWidth: 22, halign: 'center', fontStyle: 'bold' },
-          3: { cellWidth: 28, halign: 'center' },
-          4: { cellWidth: 62 }
+          0: { cellWidth: 13, fontStyle: 'bold', halign: 'center' },
+          1: { cellWidth: 15, fontStyle: 'bold', halign: 'center' },
+          2: { cellWidth: 52 },
+          3: { cellWidth: 21, halign: 'center', fontStyle: 'bold' },
+          4: { cellWidth: 25, halign: 'center' },
+          5: { cellWidth: 56 }
         },
-        head: [['Cód.', 'Criterio / Pilar', 'Estado', 'Uso Empleado', 'Observación / Recomendación']],
+        head: [['ID', 'Etapa', 'Criterio / Pilar', 'Estado', 'Uso Empleado', 'Hallazgos / Observaciones']],
         body: detailRows,
         didParseCell: function (data) {
-          if (data.section === 'body' && data.column.index === 2) {
+          if (data.section === 'body' && data.column.index === 3) {
             const val = data.cell.raw;
             if (val === 'Cumple') data.cell.styles.textColor = [16, 125, 85];
             else if (val === 'Parcial') data.cell.styles.textColor = [180, 110, 10];
@@ -1486,7 +1546,7 @@
       const techImplementer = (appState.company.techImplementer || 'No especificado').trim();
       const accountingAnalyst = (appState.company.accountingAnalyst || 'No especificado').trim();
 
-      const topGaps = metrics.gaps.slice(0, 6).map(g => `• [${g.code}] ${g.title} (${g.status})`).join('\n');
+      const topGaps = metrics.gaps.slice(0, 8).map(g => `• [${g.code}] ${g.title} (${g.status})`).join('\n');
 
       let msg = `*DIAGNÓSTICO TECNOLÓGICO Y OPERATIVO EMPRESARIAL (VENEZUELA)*\n\n`;
       msg += `*1. DATOS GENERALES DE LA EMPRESA:*\n`;
@@ -1558,12 +1618,6 @@
       window.open(waUrl, '_blank', 'noopener');
     }
 
-    // Navegación suave hacia sección de exportación
-    function scrollToResults() {
-      const el = document.getElementById('resultsExportSection');
-      if (el) el.scrollIntoView({ behavior: 'smooth' });
-    }
-
     // Modal de Reinicio
     function openResetModal() {
       const modal = document.getElementById('resetModal');
@@ -1604,50 +1658,6 @@
       showToast('Formulario y evaluación reiniciados correctamente.', 'info');
     }
 
-    // Modal GitHub Pages & Descarga de index.html
-    function toggleGithubModal(show) {
-      const modal = document.getElementById('githubModal');
-      if (!modal) return;
-      if (show) {
-        modal.classList.remove('hidden');
-        modal.classList.add('flex');
-      } else {
-        modal.classList.add('hidden');
-        modal.classList.remove('flex');
-      }
-    }
-
-    function downloadHtmlFile() {
-      const fullHtml = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
-      const blob = new Blob([fullHtml], { type: 'text/html;charset=utf-8' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'index.html';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-      showToast('Archivo index.html descargado para subir a GitHub Pages.', 'success');
-    }
-
-    function copyFullHtmlSource() {
-      const fullHtml = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
-      const textarea = document.createElement('textarea');
-      textarea.value = fullHtml;
-      textarea.style.position = 'fixed';
-      textarea.style.opacity = '0';
-      document.body.appendChild(textarea);
-      textarea.select();
-      try {
-        document.execCommand('copy');
-        showToast('Código HTML completo copiado al portapapeles.', 'success');
-      } catch (e) {
-        showToast('No se pudo copiar automáticamente. Use "Descargar Archivo index.html".', 'warning');
-      }
-      document.body.removeChild(textarea);
-    }
-
     // Notificaciones Toast
     function showToast(message, type = 'info') {
       const container = document.getElementById('toastContainer');
@@ -1673,9 +1683,12 @@
 
     // Inicialización al cargar la página
     window.addEventListener('DOMContentLoaded', () => {
+      const yearEl = document.getElementById('currentYear');
+      if (yearEl) yearEl.textContent = new Date().getFullYear();
+
       loadSavedState();
       bindCompanyInputs();
-      switchStageTab(appState.activeTab || 'stage1');
+      switchStageTab(appState.activeTab || 'all');
       recalculateAll();
     });
   </script>
